@@ -2,11 +2,59 @@
 <html>
 <!-- background-color: cadetblue; -->
   <body style = "font-family: Helvetica, Noto Sans, sans-serif; background-color: cadetblue; background-image: url(./Background.jpg); background-size: cover;">
-    <div style="border: solid; width: 280px; border-radius: 23px; padding: 23px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+    <div id = "window" class="window" style="height: 260px; width: 280px;">
+        <div style="display: block; justify-content: space-between;">
+            <p id="close_welcome" style="cursor: pointer;" class="close_button"></p>
+            <p id="welcomeheader" class="window_header">WELCOME!</p>
+        </div>
         <h1 style="margin: 4px;">Welcome to CucumberOS!</h1>
         <h2 style="margin: 4px;">Introduction</h2>
         <h4 style="margin: 4px;"> A OS (OPERATING SYSTEM) made to give the best experience possible!</h4>
     </div>
+    <div id="top" style = "position: absolute; width: 99.53%; display: flex; backdrop-filter: blur(10px); background-color: rgba(0, 0, 0, 0.25); color: whitesmoke; top: 0%; justify-content: space-between;">
+        <p style = "margin-left: 16px">CucumberOS</p>
+        <p id="open_welcome"">WELCOME!</p>
+        <p>🥒 CUCUMBERS! 🥒</p>
+        <p id="TIME" style="margin-right: 22px;">
+            Time
+        </p>
+    </div>
+    <div id="apps" style="padding-top: 65px; padding-left: 30px;">
+            <div id = "notetaker" class="window" style="height: 680px; width: 580px; display: none;">
+                <div style="display: block; justify-content: space-between;">
+                    <p id="notetaker_close" style="cursor: pointer;" class="close_button"></p>
+                    <p id="notetakerheader" class="window_header">Note Taker</p>
+                </div>
+                <h1 style="margin: 4px;">Take Notes:</h1>
+                <div style="background-color: #dfb0b0; margin: 6px; border-radius: 12px; width: 520px; height: 480px; padding: 16px; font-family: Courier; display: flex;">
+                    <div style="background-color: #f1c9c9; width: 540px; padding: 16px; border-radius: 16px;">
+                        <p style="margin: 0px;">HI! START WRITING!</p>
+                        <p style="font-size: 12px; margin: 0px;">2026/6/9</p>
+                        <div style="overflow-y: scroll;">
+                        <p contenteditable="True">
+                        <span id="content" contenteditable="true">
+                            TYPE HERE
+                            </br>
+                            </br>
+                            </br>
+                            </br>
+                        </span>
+                        <span contenteditable="true">
+                        </span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div style="width: 60px; margin-left: 1%;" onclick="icon_tap(this)" data-target="notetaker">
+                <img src="./ICON1.png" style="width: 64px; height: 64px; border-radius: 16px;">
+                <!--  style="color: whitesmoke;" -->
+                <p style="color: whitesmoke;">NoteTaker</p>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
   </body>
 
 </html>
