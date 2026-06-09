@@ -58,3 +58,7 @@ To run a clone of CucumberOS locally on your machine:
    cd CucumberOS
    ```
 3. Open `index.html` directly in your favorite web browser or host it via a local environment extension (like VS Code Live Server).
+
+#Credits:
+##ME
+##The website that stardance gave to help me make this project come true: https://jams.hackclub.com/batch/webOS
