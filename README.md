@@ -69,3 +69,9 @@ To run a clone of CucumberOS locally on your machine:
 ### 💖 Credits
 - **Me (coder1529)**
 - **Hack Club Jams (Stardance WebOS Batch):** https://jams.hackclub.com/batch/webOS
+
+## NEXT GOALS
+
+- Make a Cyberdeck powered by Raspberry pi 5
+- Attend the outpost Hackathon with the Cyberdeck as a x - tier project (maybe)
+- CONTINUE MY DREAM TO MIT!
