@@ -1,5 +1,5 @@
 /* ==========================================================================
-   💾 1. 애플리케이션 데이터 정의 (NoteTaker용 템플릿 엔진)
+   💾 1. 데이터 모델 및 정형 템플릿 처리부
    ========================================================================== */
 var content = [
   {
@@ -14,7 +14,6 @@ var content = [
   }
 ];
 
-// 정형화된 HTML 마크업 템플릿 빌더 함수
 function generateNoteHTML(heading, dateString, bodyText) {
   return `
     <div style="background-color: #dfb0b0; border-radius: 12px; height: 100%; padding: 16px; font-family: Courier, monospace; box-sizing: border-box; display: flex; flex-direction: column; box-shadow: inset 0 0 10px rgba(0,0,0,0.05);">
@@ -22,7 +21,7 @@ function generateNoteHTML(heading, dateString, bodyText) {
             <p style="margin: 0px 0px 4px 0px; font-weight: bold; font-size: 16px; color: #333;">${heading}</p>
             <p style="font-size: 11px; margin: 0px 0px 12px 0px; color: #666;">📅 ${dateString}</p>
             <div style="overflow-y: auto; flex: 1; padding-right: 5px;">
-                <div contenteditable="true" style="outline: none; min-height: 100%; line-height: 1.5; color: #111;">
+                <div contenteditable="true" style="outline: none; min-height: 100%; line-height: 1.5; color: #111; user-select: text;">
                     ${bodyText}
                 </div>
             </div>
@@ -32,11 +31,23 @@ function generateNoteHTML(heading, dateString, bodyText) {
 }
 
 /* ==========================================================================
-   ✨ [Part 5 고급 기능] 오이 클릭커 게임 핵심 상태 관리 데이터
+   ✨ [상점 대확장] 오이 클릭커 게임 글로벌 상태 관리 데이터
    ========================================================================== */
 var cucumberScore = 0;
 var cucumbersPerSecond = 0;
+
+// 아이템별 기본 비용 및 1개당 상승하는 CPS 스펙 정의
 var farmCost = 15;
+var farmCpsValue = 1;
+
+var greenhouseCost = 100;
+var greenhouseCpsValue = 8;
+
+var labCost = 500;
+var labCpsValue = 45;
+
+var aiCost = 3000;
+var aiCpsValue = 260;
 
 /* ==========================================================================
    🖥️ 2. 핵심 글로벌 상태값 및 DOM 셀렉터 인스턴스화
@@ -49,59 +60,43 @@ var noteListContainer = document.querySelector("#noteList");
 var notesContentContainer = document.querySelector("#notesContent");
 
 var selected_icon = undefined;
-var biggestIndex = 10; // 초기 z-index 레이어 기준점
+var biggestIndex = 10; 
 
 /* ==========================================================================
-   🎯 3. 완벽한 윈도우 정중앙 강제 배치 조율 모듈 (Center Spawn Engine - 버그 수정본)
+   🎯 3. 완벽한 윈도우 정중앙 강제 배치 조율 모듈 (Center Spawn Engine)
    ========================================================================== */
 function centerWindow(element) {
   if (!element) return;
   
-  // 1. 숨겨진 윈도우 인스턴스의 픽셀 영역 추적을 위한 가시화 활성화 연산 처리
+  // 숨겨진 요소의 픽셀 수치 계산을 위해 임시로 block 활성화
   var originalDisplay = element.style.display;
   element.style.display = "block";
 
-  // 2. [중요] CSS 파일(.window)에 박혀있는 마진 및 이동 변형 속성이 좌표 계산을 방해하지 못하도록 강제 초기화
+  // CSS 마진 및 트랜스폼 스타일 간섭 차단 초기화
   element.style.margin = "0px";
   element.style.transform = "none";
 
-  // 3. 뷰포트 영역 및 타겟 윈도우 박스 실시간 크기 측정
   var windowWidth = element.offsetWidth;
   var windowHeight = element.offsetHeight;
   var screenWidth = window.innerWidth;
   var screenHeight = window.innerHeight;
 
-  // 4. 동적 센터링 오프셋 공식 연산
   var centerLeft = (screenWidth - windowWidth) / 2;
   var centerTop = (screenHeight - windowHeight) / 2;
 
-  // 5. 상단 시스템 메뉴 바(40px) 컴포넌트 밑으로 들어가도록 한계선 적용
+  // 탑 바(40px) 충돌 보정
   if (centerTop < 50) centerTop = 50;
   if (centerLeft < 0) centerLeft = 0;
 
-  // 6. 스타일 시트에 절대값 픽셀 단위로 정확하게 주입
   element.style.position = "absolute";
   element.style.left = centerLeft + "px";
   element.style.top = centerTop + "px";
 
-  // 7. 기존 display 상태값으로 원래대로 복원
+  // 상태 복원
   element.style.display = originalDisplay;
 }
 
-
-// 🚀 시스템 기동 즉시 배치 실행
-centerWindow(welcome);
-centerWindow(notetaker);
-centerWindow(clickerWindow);
-
-dragElement(welcome);
-dragElement(notetaker);
-dragElement(clickerWindow);
-
-
-/* ==========================================================================
-   🎛️ 4. 윈도우 코어 제어 레이어 (드래그, 깊이 레이어 관리)
-   ========================================================================== */
+// 윈도우 드래그 바인딩 함수
 function dragElement(element) {
   if (!element) return;
   var initialX = 0, initialY = 0, currentX = 0, currentY = 0;
@@ -116,7 +111,7 @@ function dragElement(element) {
   function startDragging(e) {
     e = e || window.event;
     
-    // contenteditable 편집 구역 및 입력 폼 컴포넌트, 오이 클릭 타겟일 경우 드래그 무시 처리
+    // 에디터 폼 필드나 클릭커 상점 버튼, 거대 오이를 누를 때는 드래그 비활성화 처리
     if (e.target.closest('[contenteditable="true"]') || e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'BUTTON' || e.target.id === 'bigCucumber') {
       return;
     }
@@ -127,7 +122,6 @@ function dragElement(element) {
     document.onmouseup = stopDragging;
     document.onmousemove = moveElement;
     
-    // 클릭 시 해당 창을 화면 전면으로 포커싱 레이어 업
     layer(element);
   }
 
@@ -148,7 +142,7 @@ function dragElement(element) {
   }
 }
 
-// 실시간 시스템 시계 모듈 구동
+// 실시간 시계
 function update_time(){
     var time = new Date().toLocaleString();
     var text = document.querySelector("#TIME");
@@ -157,7 +151,7 @@ function update_time(){
 setInterval(update_time, 1000);
 update_time();
 
-// 윈도우 창 레이어 흐름 제어 함수군
+// 윈도우 레이어 제어 프로토콜
 function open_window(element) {
   if(!element) return;
   element.style.display = "block";
@@ -188,7 +182,7 @@ function layer(element) {
   element.style.zIndex = biggestIndex;
 }
 
-// 바탕화면 앱 아이콘 원클릭 / 더블액션 라우터 트리거
+// 아이콘 선택/더블 핸들러
 function icon_tap(element){
     if (element.classList.contains("selected")) {
         var target_id = element.getAttribute("data-target"); 
@@ -204,12 +198,10 @@ function icon_tap(element){
     }
 }
 
-// 윈도우 본체 표면 마우스 다운 레이어 정렬 연동
 if (welcome) welcome.addEventListener("mousedown", () => layer(welcome));
 if (notetaker) notetaker.addEventListener("mousedown", () => layer(notetaker));
 if (clickerWindow) clickerWindow.addEventListener("mousedown", () => layer(clickerWindow));
 
-// 시스템 창 기능 버튼 리스너 바인딩
 var welcome_close = document.querySelector("#close_welcome");
 var welcome_open = document.querySelector("#open_welcome");
 var notetaker_close = document.querySelector("#notetaker_close");
@@ -222,7 +214,7 @@ if(welcome_open) welcome_open.addEventListener("click", function() { open_window
 
 
 /* ==========================================================================
-   📝 5. [앱 1] NoteTaker 제어 로직 (동적 바인딩 및 선택)
+   📝 4. [앱 1] NoteTaker 목록 동적 드로잉 제어 로직
    ========================================================================== */
 function set_note(index) {
   if (notesContentContainer && content[index]) {
@@ -260,6 +252,7 @@ function renderNoteSidebar() {
     item.style.display = "flex";
     item.style.flexDirection = "column";
     item.style.gap = "2px";
+    item.style.boxSizing = "border-box";
 
     item.innerHTML = `<div style="font-weight:600; color:#222; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">${note.title}</div><div style="font-size:10px; color:#999;">${note.date}</div>`;
     
@@ -270,9 +263,6 @@ function renderNoteSidebar() {
   });
 }
 
-/* ==========================================================================
-   📝 5. [앱 1] NoteTaker 제어 로직 내부 (handleAddNote 함수 마무리 구간)
-   ========================================================================== */
 function handleAddNote() {
   var titleInput = document.querySelector("#newNoteTitle");
   var descInput = document.querySelector("#newNoteDesc");
@@ -284,13 +274,13 @@ function handleAddNote() {
   
   var today = new Date();
   var dateString = today.getFullYear() + "/" + (today.getMonth() + 1) + "/" + today.getDate();
-
+  
   var newNote = {
     title: title,
     date: dateString,
     content: generateNoteHTML(title.toUpperCase(), dateString, desc || "No content written.")
   };
-
+  
   content.push(newNote);
   titleInput.value = "";
   descInput.value = "";
@@ -300,52 +290,103 @@ function handleAddNote() {
 
 var addNoteBtn = document.querySelector("#addNoteBtn");
 if(addNoteBtn) addNoteBtn.addEventListener("click", handleAddNote);
-
-
 /* ==========================================================================
-   ✨ 6. [앱 2] Cucumber Clicker 게임 엔진 구현 (Part 5 구조 연동)
+   ✨ 5. [앱 2] Cucumber Clicker 확장팩 상점 엔진 구현 (4종 아이템 연동)
    ========================================================================== */
 var bigCucumberBtn = document.querySelector("#bigCucumber");
-var buyFarmBtn = document.querySelector("#buyFarmBtn");
 var scoreDisplay = document.querySelector("#scoreDisplay");
 var cpsDisplay = document.querySelector("#cpsDisplay");
-var farmCostDisplay = document.querySelector("#farmCostDisplay");
 
+// 이미지 속 선언과 정확히 일치하도록 변수명 버그 수정 및 동형 매핑
+var buyFarmBtn = document.querySelector("#buyFarmBtn");
+var buyGreenhouseBtn = document.querySelector("#buyGreenhouseBtn");
+var buyLabBtnBtn = document.querySelector("#buyLabBtn"); // 🧪 LabBtn 수정
+var buyAiBtnBtn = document.querySelector("#buyAiBtn");   // 🤖 AiBtn 수정
+
+// 비용 노출 레이블 디스플레이 셀렉터 매핑
+var farmCostDisplay = document.querySelector("#farmCostDisplay");
+var greenhouseCostDisplay = document.querySelector("#greenhouseCostDisplay");
+var labCostDisplay = document.querySelector("#labCostDisplay");
+var aiCostDisplay = document.querySelector("#aiCostDisplay");
+
+// 4종 상점 인플레이션 UI 동기화 함수
 function updateClickerUI() {
   if (scoreDisplay) scoreDisplay.innerHTML = cucumberScore + " 🥒";
   if (cpsDisplay) cpsDisplay.innerHTML = "초당 생산량(CPS): " + cucumbersPerSecond;
-  if (farmCostDisplay) farmCostDisplay.innerHTML = "비용: " + farmCost + " 🥒 (CPS +1)";
+  
+  if (farmCostDisplay) farmCostDisplay.innerHTML = "비용: " + farmCost + " 🥒 (+" + farmCpsValue + " CPS)";
+  if (greenhouseCostDisplay) greenhouseCostDisplay.innerHTML = "비용: " + greenhouseCost + " 🥒 (+" + greenhouseCpsValue + " CPS)";
+  if (labCostDisplay) labCostDisplay.innerHTML = "비용: " + labCost + " 🥒 (+" + labCpsValue + " CPS)";
+  if (aiCostDisplay) aiCostDisplay.innerHTML = "비용: " + aiCost + " 🥒 (+" + aiCpsValue + " CPS)";
 }
 
-// 오이 수동 클릭 이벤트 매핑
+// 오이 수동 마우스 클릭 이벤트
 if (bigCucumberBtn) {
   bigCucumberBtn.addEventListener("click", function() {
     cucumberScore += 1;
     updateClickerUI();
-    
-    // 오이 크기 햅틱 피드백 스케일 효과
     bigCucumberBtn.style.transform = "scale(0.85)";
-    setTimeout(function() {
-      bigCucumberBtn.style.transform = "scale(1)";
-    }, 50);
+    setTimeout(function() { bigCucumberBtn.style.transform = "scale(1)"; }, 50);
   });
 }
 
-// 상점 업그레이드 농장(Farm) 구매 바인딩
+// [업그레이드 1] 농장 구매
 if (buyFarmBtn) {
   buyFarmBtn.addEventListener("click", function() {
     if (cucumberScore >= farmCost) {
       cucumberScore -= farmCost;
-      cucumbersPerSecond += 1;
-      farmCost = Math.floor(farmCost * 1.5); // 비용 인플레이션 누적 증가율 설정
+      cucumbersPerSecond += farmCpsValue;
+      farmCost = Math.floor(farmCost * 1.5); 
       updateClickerUI();
     } else {
-      alert("오이(🥒)가 부족합니다! 거대 오이를 더 클릭하세요!");
+      alert("오이(🥒)가 부족합니다! 농장을 구매할 수 없습니다.");
     }
   });
 }
 
-// 자동 생산성 코어 루프 엔진 가동 (1000ms 주기)
+// [업그레이드 2] 온실 구매
+if (buyGreenhouseBtn) {
+  buyGreenhouseBtn.addEventListener("click", function() {
+    if (cucumberScore >= greenhouseCost) {
+      cucumberScore -= greenhouseCost;
+      cucumbersPerSecond += greenhouseCpsValue;
+      greenhouseCost = Math.floor(greenhouseCost * 1.5); 
+      updateClickerUI();
+    } else {
+      alert("오이(🥒)가 부족합니다! 온실을 구매할 수 없습니다.");
+    }
+  });
+}
+
+// [업그레이드 3] 유전공학 연구소 구매 (수정된 변수명 적용)
+if (buyLabBtnBtn) {
+  buyLabBtnBtn.addEventListener("click", function() {
+    if (cucumberScore >= labCost) {
+      cucumberScore -= labCost;
+      cucumbersPerSecond += labCpsValue;
+      labCost = Math.floor(labCost * 1.5); 
+      updateClickerUI();
+    } else {
+      alert("오이(🥒)가 부족합니다! 연구소를 구매할 수 없습니다.");
+    }
+  });
+}
+
+// [업그레이드 4] 오이 AI 메인프레임 구매 (수정된 변수명 적용)
+if (buyAiBtnBtn) {
+  buyAiBtnBtn.addEventListener("click", function() {
+    if (cucumberScore >= aiCost) {
+      cucumberScore -= aiCost;
+      cucumbersPerSecond += aiCpsValue;
+      aiCost = Math.floor(aiCost * 1.5); 
+      updateClickerUI();
+    } else {
+      alert("오이(🥒)가 부족합니다! Cucumber AI를 구동할 수 없습니다.");
+    }
+  });
+}
+
+// 오이 자동 획득 초당 루틴 처리 (1000ms 회전)
 setInterval(function() {
   if (cucumbersPerSecond > 0) {
     cucumberScore += cucumbersPerSecond;
@@ -355,10 +396,20 @@ setInterval(function() {
 
 
 /* ==========================================================================
-   🎬 7. 시스템 초기 부팅 구동 절차
+   🎬 6. 즉시 부팅 및 강제 센터링 시동 초기화
    ========================================================================== */
-renderNoteSidebar();
-if (content.length > 0) {
-  set_note(0); 
-}
-updateClickerUI();
+window.onload = function() {
+  centerWindow(welcome);
+  centerWindow(notetaker);
+  centerWindow(clickerWindow);
+  
+  dragElement(welcome);
+  dragElement(notetaker);
+  dragElement(clickerWindow);
+
+  renderNoteSidebar();
+  if (content.length > 0) {
+    set_note(0); 
+  }
+  updateClickerUI();
+};
