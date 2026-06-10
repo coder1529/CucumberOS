@@ -1,60 +1,45 @@
 <!DOCTYPE html>
 <html>
-  <body style="font-family: Helvetica, Noto Sans, sans-serif; background-color: cadetblue; background-image: url(./Background.jpg); background-size: cover;">
+<head>
+  <title>CucumberOS</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 
-    <!-- TOP BAR -->
-    <div id="top" style="position: absolute; width: 99.53%; display: flex; backdrop-filter: blur(10px); background-color: rgba(0, 0, 0, 0.25); color: whitesmoke; top: 0%; justify-content: space-between;">
-      <p style="margin-left: 16px">CucumberOS</p>
-      <p id="open_welcome">WELCOME!</p>
-      <p>🥒 CUCUMBERS! 🥒</p>
-      <p id="TIME" style="margin-right: 22px;">Time</p>
-    </div>
+<body style="font-family: Helvetica, sans-serif; background-color: cadetblue; background-image: url('./Background.jpg'); background-size: cover; margin: 0;">
+
+  <!-- TOP BAR -->
+  <div id="top" style="position: absolute; width: 100%; display: flex; justify-content: space-between; background: rgba(0,0,0,0.3); color: white; padding: 10px;">
+    <p style="margin-left: 10px;">CucumberOS</p>
+    <p>WELCOME!</p>
+    <p>🥒 CUCUMBERS 🥒</p>
+    <p id="TIME" style="margin-right: 10px;">Time</p>
+  </div>
+
+  <!-- DESKTOP -->
+  <div id="apps" style="padding-top: 60px; padding-left: 20px;">
 
     <!-- WELCOME WINDOW -->
-    <div id="window" class="window" style="height: 260px; width: 280px;">
-      <div>
-        <p id="close_welcome" style="cursor: pointer;" class="close_button">X</p>
-        <p id="welcomeheader" class="window_header">WELCOME!</p>
-      </div>
-      <h1 style="margin: 4px;">Welcome to CucumberOS!</h1>
-      <h4 style="margin: 4px;">An OS made for the best experience possible!</h4>
+    <div id="window" class="window" style="width: 280px; height: 260px; background: white; border-radius: 10px; padding: 10px; position: absolute;">
+      <h2>WELCOME TO CUCUMBEROS</h2>
+      <p>A simple OS UI project</p>
     </div>
 
-    <!-- MAIN AREA -->
-    <div id="apps" style="padding-top: 65px; padding-left: 30px; display: flex;">
+    <!-- NOTE TAKER WINDOW -->
+    <div id="notetaker" class="window" style="display:none; width: 500px; height: 500px; background: white; border-radius: 10px; padding: 10px; position: absolute;">
+      <h2>Note Taker</h2>
 
-      <!-- SIDEBAR (IMPORTANT FOR addToSideBar) -->
-      <div id="sidebar" style="width: 200px; height: 600px; overflow-y: auto; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 10px;">
-        <!-- JS will inject notes here -->
+      <div id="notesContent" style="background: #f1c9c9; height: 400px; padding: 10px; overflow-y: auto;">
+        TYPE YOUR NOTES HERE...
       </div>
-
-      <!-- NOTE TAKER WINDOW -->
-      <div id="notetaker" class="window" style="height: 680px; width: 580px; display: none; margin-left: 20px;">
-        <div>
-          <p id="notetaker_close" style="cursor: pointer;" class="close_button">X</p>
-          <p id="notetakerheader" class="window_header">Note Taker</p>
-        </div>
-
-        <h1 style="margin: 4px;">Take Notes:</h1>
-
-        <!-- NOTES DISPLAY AREA (IMPORTANT FOR set_note) -->
-        <div id="notesContent"
-             style="background-color: #dfb0b0; margin: 6px; border-radius: 12px; width: 520px; height: 480px; padding: 16px; font-family: Courier; overflow-y: auto;">
-          <!-- JS injects note content here -->
-        </div>
-      </div>
-
-      <!-- APP ICON -->
-      <div style="width: 60px; margin-left: 1%;" onclick="icon_tap(this)" data-target="notetaker">
-        <img src="./ICON1.png" style="width: 64px; height: 64px; border-radius: 16px;">
-        <p style="color: whitesmoke;">NoteTaker</p>
-      </div>
-
     </div>
 
-    <!-- SCRIPTS -->
-    <script src="script.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <!-- APP ICON -->
+    <div onclick="document.getElementById('notetaker').style.display='block'" style="width: 80px; margin-top: 20px; cursor: pointer;">
+      <img src="./ICON1.png" style="width: 64px; height: 64px;">
+      <p>NoteTaker</p>
+    </div>
 
-  </body>
+  </div>
+
+</body>
 </html>
