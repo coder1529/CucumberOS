@@ -1,4 +1,4 @@
-# 🥒 CucumberOS
+# 🥒 CucumberOS 🥒
 
 > A custom, sleek web-based operating system ecosystem built for the Hack Club Stardance (WebOS 1 Mission). Designed to give the absolute best cucumber-themed digital experience possible!
 
