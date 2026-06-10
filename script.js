@@ -171,7 +171,21 @@ function set_note(index) {
   notesContent.innerHTML = content[index].content
 }
 
-setNotesContent(0)
+function addToSideBar(index) {
+  const side_bar = document.querySelector("#sidebar");
+  const note_button = document.createElement("button");
+  note_button.classList.add("note-item");
+    note_button.innerHTML = `
+    <h4>${content[index].title}</h4>
+    <p>${content[index].date}</p>
+  `;
+  note_button.addEventListener("click", () => {
+    set_note(index);
+  })
+  sidebar.appendChild(note_button);
+}
+
+set_note(0)
 
 // function initialize(element_name) {
 //   var screen = document.querySelector("#" + element_name)
