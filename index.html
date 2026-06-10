@@ -1,45 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>CucumberOS</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CucumberOS</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
-
-<body style="font-family: Helvetica, sans-serif; background-color: cadetblue; background-image: url('./Background.jpg'); background-size: cover; margin: 0;">
-
-  <!-- TOP BAR -->
-  <div id="top" style="position: absolute; width: 100%; display: flex; justify-content: space-between; background: rgba(0,0,0,0.3); color: white; padding: 10px;">
-    <p style="margin-left: 10px;">CucumberOS</p>
-    <p>WELCOME!</p>
-    <p>🥒 CUCUMBERS 🥒</p>
-    <p id="TIME" style="margin-right: 10px;">Time</p>
-  </div>
-
-  <!-- DESKTOP -->
-  <div id="apps" style="padding-top: 60px; padding-left: 20px;">
-
-    <!-- WELCOME WINDOW -->
-    <div id="window" class="window" style="width: 280px; height: 260px; background: white; border-radius: 10px; padding: 10px; position: absolute;">
-      <h2>WELCOME TO CUCUMBEROS</h2>
-      <p>A simple OS UI project</p>
+<body style="font-family: Helvetica, Noto Sans, sans-serif; background-color: cadetblue; background-image: url('./Background.jpg'); background-size: cover; margin: 0; padding: 0; overflow: hidden; height: 100vh; width: 100vw; user-select: none;">
+    
+    <!-- 1. 웰컴 윈도우 -->
+    <div id="window" class="window" style="height: 260px; width: 280px; position: absolute; display: block; z-index: 2;">
+        <div style="display: block; justify-content: space-between;">
+            <p id="close_welcome" style="cursor: pointer;" class="close_button"></p>
+            <p id="welcomeheader" class="window_header">WELCOME!</p>
+        </div>
+        <h1 style="margin: 4px; font-size: 20px;">Welcome to CucumberOS!</h1>
+        <h2 style="margin: 4px; font-size: 16px;">Introduction</h2>
+        <h4 style="margin: 4px; font-size: 12px; font-weight: normal;">A OS (OPERATING SYSTEM) made to give the best experience possible!</h4>
     </div>
 
-    <!-- NOTE TAKER WINDOW -->
-    <div id="notetaker" class="window" style="display:none; width: 500px; height: 500px; background: white; border-radius: 10px; padding: 10px; position: absolute;">
-      <h2>Note Taker</h2>
-
-      <div id="notesContent" style="background: #f1c9c9; height: 400px; padding: 10px; overflow-y: auto;">
-        TYPE YOUR NOTES HERE...
-      </div>
+    <!-- 2. 상단 시스템 탑 메뉴 바 -->
+    <div id="top" style="position: absolute; width: 100%; display: flex; backdrop-filter: blur(10px); background-color: rgba(0, 0, 0, 0.25); color: whitesmoke; top: 0%; justify-content: space-between; z-index: 9999; box-sizing: border-box; align-items: center; height: 40px; padding: 0 10px;">
+        <p style="margin: 0; font-weight: bold;">CucumberOS</p>
+        <p id="open_welcome" style="cursor: pointer; margin: 0; background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 4px;">WELCOME!</p>
+        <p style="margin: 0;">🥒 CUCUMBERS! 🥒</p>
+        <p id="TIME" style="margin: 0;">Time</p>
     </div>
 
-    <!-- APP ICON -->
-    <div onclick="document.getElementById('notetaker').style.display='block'" style="width: 80px; margin-top: 20px; cursor: pointer;">
-      <img src="./ICON1.png" style="width: 64px; height: 64px;">
-      <p>NoteTaker</p>
+    <!-- 3. 바탕화면 바로가기 아이콘 및 컨테이너 -->
+    <div id="apps" style="padding-top: 65px; padding-left: 30px; box-sizing: border-box; height: 100%; display: flex; gap: 25px; align-items: flex-start; position: relative;">
+        
+        <!-- [수정완료] 노트 테이커 메인 윈도우 (사이드바 완전 정상화) -->
+        <div id="notetaker" class="window" style="height: 620px; width: 840px; display: none; position: absolute; background-color: #f0f0f0; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; z-index: 1;">
+            
+            <!-- 윈도우 상단 바 -->
+            <div style="display: flex; justify-content: space-between; background-color: #333; color: white; padding: 8px 12px; align-items: center; box-sizing: border-box;">
+                <p id="notetakerheader" class="window_header" style="margin: 0; flex-grow: 1; cursor: move; font-weight: bold;">Note Taker</p>
+                <p id="notetaker_close" style="cursor: pointer; margin: 0; font-weight: bold; background: #ff5c5c; color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 11px;">X</p>
+            </div>
+            
+            <h1 style="margin: 15px 15px 5px 15px; font-size: 24px; color: #222;">Advanced Note Taker:</h1>
+            
+            <!-- 전체 작업 영역 내부 배치 레이아웃 -->
+            <div style="display: flex; height: 490px; margin: 0 15px 15px 15px; box-sizing: border-box; gap: 15px;">
+                
+                <!-- 좌측 패널: 상단(노트 리스트 탭) + 하단(생성 폼) 통합 컴포넌트 -->
+                <div style="width: 240px; display: flex; flex-direction: column; gap: 10px; height: 100%; box-sizing: border-box;">
+                    
+                    <!-- [버그수정] 누락되었던 스크롤 가능 노트 목록 컨테이너 복구 -->
+                    <div id="noteList" style="flex: 1; background-color: rgba(255, 255, 255, 0.9); border-radius: 12px; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; border: 1px solid #ddd; box-sizing: border-box;">
+                        <!-- 스크립트가 동적으로 생성 주입합니다 -->
+                    </div>
+                    
+                    <!-- 새 노트 작성 컴포넌트 폼 -->
+                    <div style="background-color: #e2e8f0; border-radius: 12px; padding: 10px; border: 1px solid #cbd5e1; display: flex; flex-direction: column; gap: 6px; box-sizing: border-box;">
+                        <span style="font-size: 11px; font-weight: bold; color: #475569;">CREATE NEW NOTE</span>
+                        <input type="text" id="newNoteTitle" placeholder="Note Title..." style="width: 100%; padding: 6px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; box-sizing: border-box; outline: none; background: white; color: black;">
+                        <textarea id="newNoteDesc" placeholder="Quick starter text..." style="width: 100%; height: 50px; padding: 6px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 12px; box-sizing: border-box; outline: none; resize: none; font-family: sans-serif; background: white; color: black;"></textarea>
+                        <button id="addNoteBtn" style="width: 100%; padding: 8px; background-color: #22c55e; color: white; border: none; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer;">+ Add Note</button>
+                    </div>
+                </div>
+
+                <!-- 우측 본문 영역: 분홍색 에디터 메모지 컨테이너 -->
+                <div id="notesContent" style="flex: 1; height: 100%; box-sizing: border-box;">
+                    <!-- 스크립트 내용 로드 -->
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 오이 클릭커 게임 윈도우 인터페이스 -->
+        <div id="clicker" class="window" style="height: 400px; width: 500px; display: none; position: absolute; background-color: #ecfdf5; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; z-index: 1; border: 2px solid #059669;">
+            <div style="display: flex; justify-content: space-between; background-color: #059669; color: white; padding: 8px 12px; align-items: center; box-sizing: border-box;">
+                <p id="clickerheader" class="window_header" style="margin: 0; flex-grow: 1; cursor: move; font-weight: bold;">Cucumber Clicker v1.0</p>
+                <p id="clicker_close" style="cursor: pointer; margin: 0; font-weight: bold; background: #ff5c5c; color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 11px;">X</p>
+            </div>
+            <div style="display: flex; height: 340px; padding: 15px; box-sizing: border-box; gap: 15px;">
+                <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: white; border-radius: 12px; border: 1px solid #a7f3d0;">
+                    <div id="scoreDisplay" style="font-size: 22px; font-weight: bold; color: #065f46; margin-bottom: 5px;">0 🥒</div>
+                    <div id="cpsDisplay" style="font-size: 12px; color: #047857; margin-bottom: 15px;">초당 생산량(CPS): 0</div>
+                    <div id="bigCucumber" style="font-size: 70px; cursor: pointer; user-select: none; transition: transform 0.05s; display: inline-block;">🥒</div>
+                </div>
+                <div style="width: 180px; background: white; border-radius: 12px; padding: 10px; border: 1px solid #a7f3d0; display: flex; flex-direction: column; gap: 10px;">
+                    <div style="font-size: 13px; font-weight: bold; color: #065f46; border-bottom: 1px solid #eee; padding-bottom: 5px;">상점 (Upgrades)</div>
+                    <button id="buyFarmBtn" style="width: 100%; padding: 8px; background-color: #10b981; color: white; border: none; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; text-align: left; display: flex; flex-direction: column;">
+                        <span>농장 구매 (Farm)</span>
+                        <span id="farmCostDisplay" style="font-size: 10px; font-weight: normal; opacity: 0.9;">비용: 15 🥒 (CPS +1)</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- [바탕화면 아이콘 1] NoteTaker -->
+        <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap(this)" data-target="notetaker">
+            <img src="./ICON1.png" alt="NoteTaker Icon" style="width: 64px; height: 64px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
+            <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">NoteTaker</p>
+        </div>
+
+        <!-- [바탕화면 아이콘 2] Cucumber Clicker -->
+        <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap(this)" data-target="clicker">
+            <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #059669; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">🥒</div>
+            <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">Clicker</p>
+        </div>
+
     </div>
 
-  </div>
-
+    <script src="script.js"></script>
 </body>
 </html>
