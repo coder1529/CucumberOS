@@ -32,3 +32,52 @@
     padding-left: 15px;
     padding-right: 25px;
 }
+
+.first_div{
+    background-color: #dfb0b0;
+    border-radius: 12px;
+    height: 100%;
+    padding: 16px;
+    font-family: Courier, monospace;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
+}
+
+.second_div{
+    background-color: #f1c9c9;
+    flex: 1;
+    padding: 16px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.heading_style{
+    margin: 0px 0px 4px 0px;
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
+
+.date_style{
+    font-size: 11px;
+    margin: 0px 0px 12px 0px;
+    color: #666;
+}
+
+.note_style_set{
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 5px;
+}
+
+.note_style{
+    outline: none;
+    min-height: 100%;
+    line-height: 1.5;
+    color: #111;
+    user-select: text;
+}

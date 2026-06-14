@@ -6,10 +6,7 @@
     <title>CucumberOS</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<!-- 화면 크기 고정 및 드래그 바운더리 오버플로우 방어 -->
 <body style="font-family: Helvetica, Noto Sans, sans-serif; background-color: cadetblue; background-image: url('./Background.jpg'); background-size: cover; margin: 0; padding: 0; overflow: hidden; height: 100vh; width: 100vw; user-select: none;">
-    
-    <!-- 1. 웰컴 윈도우 -->
     <div id="window" class="window" style="height: 260px; width: 280px; position: absolute; display: block; z-index: 2;">
         <div style="display: block; justify-content: space-between;">
             <p id="close_welcome" style="cursor: pointer;" class="close_button"></p>
@@ -19,23 +16,17 @@
         <h2 style="margin: 4px; font-size: 16px;">Introduction</h2>
         <h4 style="margin: 4px; font-size: 12px; font-weight: normal;">A OS (OPERATING SYSTEM) made to give the best experience possible!</h4>
     </div>
-
-    <!-- 2. 상단 시스템 탑 메뉴 바 -->
     <div id="top" style="position: absolute; width: 100%; display: flex; backdrop-filter: blur(10px); background-color: rgba(0, 0, 0, 0.25); color: whitesmoke; top: 0%; justify-content: space-between; z-index: 9999; box-sizing: border-box; align-items: center; height: 40px; padding: 0 10px;">
         <p style="margin: 0; font-weight: bold;">CucumberOS</p>
         <p id="open_welcome" style="cursor: pointer; margin: 0; background: rgba(255,255,255,0.2); padding: 4px 8px; border-radius: 4px;">WELCOME!</p>
         <p style="margin: 0;">🥒 CUCUMBERS! 🥒</p>
         <p id="TIME" style="margin: 0;">Time</p>
     </div>
-
-    <!-- 3. 바탕화면 바로가기 아이콘 및 컨테이너 -->
     <div id="apps" style="padding-top: 65px; padding-left: 30px; box-sizing: border-box; height: 100%; display: flex; gap: 25px; align-items: flex-start; position: relative;">
-        
-        <!-- [앱 1] 노트 테이커 메인 윈도우 -->
         <div id="notetaker" class="window" style="height: 620px; width: 840px; display: none; position: absolute; background-color: #f0f0f0; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; z-index: 1;">
             <div style="display: flex; justify-content: space-between; background-color: #333; color: white; padding: 8px 12px; align-items: center; box-sizing: border-box;">
                 <p id="notetakerheader" class="window_header" style="margin: 0; flex-grow: 1; cursor: move; font-weight: bold;">Note Taker</p>
-                <p id="notetaker_close" style="cursor: pointer; margin: 0; font-weight: bold; background: #ff5c5c; color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 11px;">X</p>
+                <p id="notetaker_close" class="close_button"></p>
             </div>
             <h1 style="margin: 15px 15px 5px 15px; font-size: 24px; color: #222;">Advanced Note Taker:</h1>
             <div style="display: flex; height: 490px; margin: 0 15px 15px 15px; box-sizing: border-box; gap: 15px;">
@@ -51,68 +42,47 @@
                 <div id="notesContent" style="flex: 1; height: 100%; box-sizing: border-box;"></div>
             </div>
         </div>
-
-        <!-- ✨ [앱 2 - 대확장] 오이 클릭커 게임 윈도우 (상점 아이템 대거 추가 버전) -->
         <div id="clicker" class="window" style="height: 480px; width: 580px; display: none; position: absolute; background-color: #ecfdf5; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; z-index: 1; border: 2px solid #059669;">
-            <!-- 윈도우 헤더 -->
             <div style="display: flex; justify-content: space-between; background-color: #059669; color: white; padding: 8px 12px; align-items: center; box-sizing: border-box;">
                 <p id="clickerheader" class="window_header" style="margin: 0; flex-grow: 1; cursor: move; font-weight: bold;">Cucumber Clicker v1.5</p>
-                <p id="clicker_close" style="cursor: pointer; margin: 0; font-weight: bold; background: #ff5c5c; color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 11px;">X</p>
+                <p id="clicker_close" class="close_button"></p>
             </div>
-            
-            <!-- 게임 본문 레이아웃 -->
             <div style="display: flex; height: 420px; padding: 15px; box-sizing: border-box; gap: 15px;">
-                <!-- 왼쪽: 오이 점수판 및 메인 타겟 -->
                 <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: white; border-radius: 12px; border: 1px solid #a7f3d0; padding: 10px;">
-                    <div id="scoreDisplay" style="font-size: 26px; font-weight: bold; color: #065f46; margin-bottom: 5px;">0 🥒</div>
-                    <div id="cpsDisplay" style="font-size: 13px; color: #047857; margin-bottom: 25px; font-weight: bold;">초당 생산량(CPS): 0</div>
+                    <div id="scoreDisplay" style="font-size: 26px; font-weight: bold; color: #065f46; margin-bottom: 5px;">🥒 0 🥒</div>
+                    <div id="cpsDisplay" style="font-size: 13px; color: #047857; margin-bottom: 25px; font-weight: bold;">Cucumbers Per Second: 0</div>
                     <div id="bigCucumber" style="font-size: 90px; cursor: pointer; user-select: none; transition: transform 0.05s; display: inline-block;">🥒</div>
                 </div>
-                
-                <!-- 오른쪽: 상점 상점 확장 스크롤 패널 -->
                 <div style="width: 230px; background: white; border-radius: 12px; padding: 12px; border: 1px solid #a7f3d0; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; box-sizing: border-box;">
-                    <div style="font-size: 14px; font-weight: bold; color: #065f46; border-bottom: 2px solid #a7f3d0; padding-bottom: 5px; margin-bottom: 4px;">오이 상점 (Upgrades)</div>
-                    
-                    <!-- 아이템 1: 농장 -->
+                    <div style="font-size: 14px; font-weight: bold; color: #065f46; border-bottom: 2px solid #a7f3d0; padding-bottom: 5px; margin-bottom: 4px;">Cucumber Shop (Upgrades)</div>
                     <button id="buyFarmBtn" style="width: 100%; padding: 8px; background-color: #10b981; color: white; border: none; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; text-align: left; display: flex; flex-direction: column; gap: 2px;">
-                        <span>🚜 오이 농장 (Farm)</span>
+                        <span>🚜 Cucumber Farm</span>
                         <span id="farmCostDisplay" style="font-size: 10px; font-weight: normal; opacity: 0.9;">비용: 15 🥒 (+1 CPS)</span>
                     </button>
-                    
-                    <!-- 아이템 2: 온실 (신규) -->
                     <button id="buyGreenhouseBtn" style="width: 100%; padding: 8px; background-color: #059669; color: white; border: none; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; text-align: left; display: flex; flex-direction: column; gap: 2px;">
-                        <span>🏡 온실 (Greenhouse)</span>
+                        <span>🏡 Cucumber Greenhouse</span>
                         <span id="greenhouseCostDisplay" style="font-size: 10px; font-weight: normal; opacity: 0.9;">비용: 100 🥒 (+8 CPS)</span>
                     </button>
-                    
-                    <!-- 아이템 3: 유전공학 연구소 (신규) -->
                     <button id="buyLabBtn" style="width: 100%; padding: 8px; background-color: #047857; color: white; border: none; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; text-align: left; display: flex; flex-direction: column; gap: 2px;">
-                        <span>🧪 연구소 (Bio Lab)</span>
+                        <span>🧪 Cucumber Lab</span>
                         <span id="labCostDisplay" style="font-size: 10px; font-weight: normal; opacity: 0.9;">비용: 500 🥒 (+45 CPS)</span>
                     </button>
-                    
-                    <!-- 아이템 4: 오이 AI 메인프레임 (신규) -->
                     <button id="buyAiBtn" style="width: 100%; padding: 8px; background-color: #064e3b; color: white; border: none; border-radius: 6px; font-size: 12px; font-weight: bold; cursor: pointer; text-align: left; display: flex; flex-direction: column; gap: 2px;">
-                        <span>🤖 오이 인공지능 (Cucumber AI)</span>
+                        <span>🤖 Cucumber AI</span>
                         <span id="aiCostDisplay" style="font-size: 10px; font-weight: normal; opacity: 0.9;">비용: 3,000 🥒 (+260 CPS)</span>
                     </button>
                 </div>
             </div>
         </div>
-
-        <!-- 바탕화면 바로가기 아이콘들 -->
         <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap(this)" data-target="notetaker">
             <img src="./ICON1.png" alt="NoteTaker Icon" style="width: 64px; height: 64px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
             <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">NoteTaker</p>
         </div>
-
         <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap(this)" data-target="clicker">
             <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #059669; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">🥒</div>
             <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">Clicker</p>
         </div>
-
-    </div> <!-- #apps 컨테이너 닫기 -->
-
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
