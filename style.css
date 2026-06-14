@@ -81,3 +81,7 @@
     color: #111;
     user-select: text;
 }
+
+.hide-mouse {
+    cursor: none;
+}

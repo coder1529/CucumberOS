@@ -138,7 +138,7 @@ function drag_element(element) {
     document.onmouseup = null;
     document.onmousemove = null;
   }
-}
+} //end of copy paste
 
 function update_time(){
   var time = new Date().toLocaleString();

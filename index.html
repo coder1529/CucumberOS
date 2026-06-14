@@ -6,7 +6,7 @@
     <title>CucumberOS</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<body style="font-family: Helvetica, Noto Sans, sans-serif; background-color: cadetblue; background-image: url('./Background.jpg'); background-size: cover; margin: 0; padding: 0; overflow: hidden; height: 100vh; width: 100vw; user-select: none;">
+<body  style="font-family: Helvetica, Noto Sans, sans-serif; background-color: cadetblue; background-image: url('./Background.jpg'); background-size: cover; margin: 0; padding: 0; overflow: hidden; height: 100vh; width: 100vw; user-select: none;">
     <div id="window" class="window" style="height: 260px; width: 280px; position: absolute; display: block; z-index: 2;">
         <div style="display: block; justify-content: space-between;">
             <p id="close_welcome" style="cursor: pointer;" class="close_button"></p>
@@ -74,6 +74,17 @@
                 </div>
             </div>
         </div>
+        <div id="Cursor Changer" class="window" style="height: 120px; width: 300px; background-color: #fef3c7; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; z-index: 1; border: 2px solid #f59e0b; display: none;">
+            <div style="display: flex; justify-content: space-between; background-color: #f59e0b; color: white; padding: 8px 12px; align-items: center; box-sizing: border-box;">
+                <p id="cursorhangerheader" class="window_header" style="margin: 0; flex-grow: 1; cursor: move; font-weight: bold;">Cursor Changer</p>
+                <p id="cursorhanger_close" class="close_button"></p>
+            </div>
+            <div style="display: flex; height: 80px; padding: 15px; box-sizing: border-box; gap: 15px;">
+                <button onclick="change_cursor('default')" style="flex: 1; background-color: #fbbf24; border-radius: 6px; border: none; color: white; font-weight: bold; cursor: pointer;">Default</button>
+                <button onclick="change_cursor('pointer')" style="flex: 1; background-color: #f59e0b; border-radius: 6px; border: none; color: white; font-weight: bold; cursor: pointer;">Pointer</button>
+                <button onclick="change_cursor('crosshair')" style="flex: 1; background-color: #d97706; border-radius: 6px; border: none; color: white; font-weight: bold; cursor: pointer;">Crosshair</button>
+            </div>
+        </div>
         <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap(this)" data-target="notetaker">
             <img src="./ICON1.png" alt="NoteTaker Icon" style="width: 64px; height: 64px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
             <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">NoteTaker</p>
@@ -82,6 +93,9 @@
             <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #059669; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">🥒</div>
             <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">Clicker</p>
         </div>
+        <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap(this)" data-target="Cursor Changer">
+            <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">🖱️</div>
+            <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">Cursor Changer</p>
     </div>
     <script src="script.js"></script>
 </body>
