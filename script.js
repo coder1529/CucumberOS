@@ -27,6 +27,10 @@ function generate_note(heading, date, content){
   `;
 }
 
+const default_cursor = document.getElementById('default_cursor');
+const pointer_cursor = document.getElementById('pointer_cursor');
+const crosshair_cursor = document.getElementById('crosshair_cursor');
+
 var cucumbers = 0;
 var cucumbers_auto_ps = 0;
 var cucumber_farm_cost = 15;
@@ -39,7 +43,8 @@ var cucumber_ai_cost = 1000;
 var cucumber_ai_cps = 1500;
 var welcome_window = document.querySelector("#window");
 var notetaker_window = document.querySelector("#notetaker");
-var clicker_window = document.querySelector("#clicker")
+var clicker_window = document.querySelector("#clicker");
+var cursor_changer_window = document.querySelector("#CursorChanger");
 var select_bar = document.querySelector("#top");
 var note_list_container = document.querySelector("#noteList");
 var note_contents_container = document.querySelector("#notesContent");
@@ -218,6 +223,7 @@ var welcome_close = document.querySelector("#close_welcome");
 var welcome_open = document.querySelector("#open_welcome");
 var notetaker_close = document.querySelector("#notetaker_close");
 var clicker_close = document.querySelector("#clicker_close");
+var cursor_changer_close = document.querySelector("#CursorChanger_close");
 
 if(notetaker_close){
   notetaker_close.addEventListener("click", function(e){e.stopPropagation(); close_window(notetaker_window);});
@@ -233,6 +239,10 @@ if(welcome_close){
 
 if(welcome_open){
   welcome_open.addEventListener("click", function(){open_window(welcome_window);});
+}
+
+if(cursor_changer_close){
+  cursor_changer_close.addEventListener("click", function(e){e.stopPropagation(); close_window(cursor_changer_window)});
 }
 
 function set_note_up(index){
@@ -322,6 +332,10 @@ var greenhouse_cost_display = document.querySelector("#greenhouseCostDisplay");
 var lab_cost_display = document.querySelector("#labCostDisplay");
 var ai_cost_display = document.querySelector("#aiCostDisplay");
 
+var default_cursor_button = document.querySelector("#default_cursor_btn");
+var pointer_cursor_button = document.querySelector("#pointer_cursor_btn");
+var crosshair_cursor_button = document.querySelector("#crosshair_cursor_btn");
+
 function update_ui(){
   if(score_display){
     score_display.innerHTML = "🥒 " + cucumbers + " 🥒";
@@ -357,7 +371,45 @@ window.onload = function() {
   drag_element(welcome_window);
   drag_element(notetaker_window);
   drag_element(clicker_window);
+  drag_element(cursor_changer_window);
   render_note_sidebar();
+
+  default_cursor.style.display = "block";
+
+  document.addEventListener('mousemove', (e) => {
+      default_cursor.style.left = `${e.pageX}px`;
+      default_cursor.style.top = `${e.pageY}px`;
+  });
+
+  document.addEventListener('mousemove', (e) => {
+      pointer_cursor.style.left = `${e.pageX}px`;
+      pointer_cursor.style.top = `${e.pageY}px`;
+  });
+
+  document.addEventListener('mousemove', (e) => {
+      crosshair_cursor.style.left = `${e.pageX}px`;
+      crosshair_cursor.style.top = `${e.pageY}px`;
+  });
+
+  default_cursor_button.addEventListener("click", function(){
+    default_cursor.style.display = "block";
+    pointer_cursor.style.display = "none";
+    crosshair_cursor.style.display = "none";
+  }
+  );
+  pointer_cursor_button.addEventListener("click", function(){
+    default_cursor.style.display = "none";
+    pointer_cursor.style.display = "block";
+    crosshair_cursor.style.display = "none";
+  }
+  );
+  crosshair_cursor_button.addEventListener("click", function(){
+    default_cursor.style.display = "none";
+    pointer_cursor.style.display = "none";
+    crosshair_cursor.style.display = "block";
+  }
+  );
+
   buy_farm_button.addEventListener("click", function(){
     if(cucumbers >= cucumber_farm_cost){
       cucumbers -= cucumber_farm_cost;

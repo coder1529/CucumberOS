@@ -1,3 +1,7 @@
+*, *::before, *::after {
+    cursor: none !important;
+}
+
 .close_button{
     cursor: pointer;
     width: 16px;
@@ -83,5 +87,16 @@
 }
 
 .hide-mouse {
-    cursor: none;
+    cursor: none !important;
+    height: 100vh;
+    margin: 0;
+}
+
+.cursor{
+    position: absolute;
+    width: 52px;
+    height: 52px;
+    pointer-events: none;
+    transition: transform 0.1s ease-out;
+    transform: translate(-50%, -50%); z-index: 9999;
 }
