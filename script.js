@@ -219,6 +219,8 @@ if (notetaker_window) notetaker_window.addEventListener("mousedown", () => layer
 
 if (clicker_window) clicker_window.addEventListener("mousedown", () => layer(clicker_window));
 
+if (cursor_changer_window) cursor_changer_window.addEventListener("mousedown", () => layer(cursor_changer_window));
+
 var welcome_close = document.querySelector("#close_welcome");
 var welcome_open = document.querySelector("#open_welcome");
 var notetaker_close = document.querySelector("#notetaker_close");
