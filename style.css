@@ -100,3 +100,17 @@
     transition: transform 0.1s ease-out;
     transform: translate(-50%, -50%); z-index: 9999;
 }
+
+.immutable-text {
+    color: greenyellow;
+    flex: 1;
+    display: inline-block;
+    word-break: break-all;
+}
+
+.scroll-container {
+  height: 500px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  padding: 15px;
+}

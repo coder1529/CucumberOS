@@ -41,13 +41,25 @@ var cucumber_lab_cost = 250;
 var cucumber_lab_cps = 50;
 var cucumber_ai_cost = 1000;
 var cucumber_ai_cps = 1500;
+var OS = document.querySelector("#OS")
 var welcome_window = document.querySelector("#window");
 var notetaker_window = document.querySelector("#notetaker");
 var clicker_window = document.querySelector("#clicker");
 var cursor_changer_window = document.querySelector("#CursorChanger");
+var background_settings_window = document.querySelector("#backgroundsetting")
+var terminal_window = document.querySelector("#terminal")
+var screentime_window = document.querySelector("#screentime")
 var select_bar = document.querySelector("#top");
 var note_list_container = document.querySelector("#noteList");
 var note_contents_container = document.querySelector("#notesContent");
+let notetakerOpen = false;
+let clickerOpen = false;
+let ccOpen = false;
+let bsOpen = false;
+let tOpen = false;
+var drag_d_e = true;
+var drag_p_e = false;
+var drag_c_e = false;
 var selected_icon = undefined;
 var biggest_index = 10;
 var cpc = 1;
@@ -156,6 +168,17 @@ function update_time(){
 setInterval(update_time, 1000);
 update_time()
 
+var notetaker_total_time = 0
+var clicker_total_time = 0
+var cc_total_time = 0
+var bs_total_time = 0
+var t_total_time = 0
+var NTtime = document.querySelector("#NTtime")
+var Ctime = document.querySelector("#Ctime")
+var CCtime = document.querySelector("#CCtime")
+var BStime = document.querySelector("#BStime")
+var TLtime = document.querySelector("#TLtime")
+
 function open_window(element){
   if(!element){
     return;
@@ -163,13 +186,190 @@ function open_window(element){
   element.style.display = "block";
   biggest_index++;
   if(select_bar) select_bar.zIndex = biggest_index + 1;
+  layer(element)
+  if(element == notetaker_window){
+      if(!notetakerOpen){
+          notetaker_start_time = new Date()
+          notetakerOpen = true;
+      }
+  }
+  if(element == clicker_window){
+      if(!clickerOpen){
+          clicker_start_time = new Date()
+          clickerOpen = true;
+      }
+  }
+  if(element == cursor_changer_window){
+      if(!ccOpen){
+          cc_start_time = new Date()
+          ccOpen = true;
+      }
+  }
+  if(element == background_settings_window){
+      if(!bsOpen){
+          bs_start_time = new Date()
+          bsOpen = true;
+      }
+  }
+  if(element == terminal_window){
+      if(!tOpen){
+          t_start_time = new Date()
+          tOpen = true;
+      }
+  }
 }
 
 function close_window(element){
   if(element){
     element.style.display = "none";
   }
+  if(element == notetaker_window){
+      if(notetakerOpen){
+          notetaker_total_time += new Date() - notetaker_start_time;
+          notetakerOpen = false;
+      }
+  }
+  if(element == clicker_window){
+      if(clickerOpen){
+          clicker_total_time += new Date() - clicker_start_time;
+          clickerOpen = false;
+      }
+  }
+  if(element == cursor_changer_window){
+      if(ccOpen){
+          cc_total_time += new Date() - cc_start_time;
+          ccOpen = false;
+      }
+  }
+  if(element == background_settings_window){
+      if(bsOpen){
+          bs_total_time += new Date() - bs_start_time;
+          bsOpen = false;
+      }
+  }
+  if(element == terminal_window){
+      if(tOpen){
+          t_total_time += new Date() - t_start_time;
+          tOpen = false;
+      }
+  }
 }
+
+function update_NTtime() {
+    let total = notetaker_total_time;
+
+    if (notetakerOpen) {
+        total += new Date() - notetaker_start_time;
+    }
+
+    let seconds = Math.floor(total / 1000);
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+
+    seconds %= 60;
+    minutes %= 60;
+
+    // NTtime.innerHTML
+    NTtime.innerHTML =
+        "<br>" +
+        hours + "h " +
+        minutes + "m " +
+        seconds + "s";
+}
+
+function update_Ctime() {
+    let total = clicker_total_time;
+
+    if (clickerOpen) {
+        total += new Date() - clicker_start_time;
+    }
+
+    let seconds = Math.floor(total / 1000);
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+
+    seconds %= 60;
+    minutes %= 60;
+
+    // NTtime.innerHTML
+    Ctime.innerHTML =
+        "<br>" +
+        hours + "h " +
+        minutes + "m " +
+        seconds + "s";
+}
+
+function update_CCtime() {
+    let total = cc_total_time;
+
+    if (ccOpen) {
+        total += new Date() - cc_start_time;
+    }
+
+    let seconds = Math.floor(total / 1000);
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+
+    seconds %= 60;
+    minutes %= 60;
+
+    // NTtime.innerHTML
+    CCtime.innerHTML =
+        "<br>" +
+        hours + "h " +
+        minutes + "m " +
+        seconds + "s";
+}
+
+function update_BStime() {
+    let total = bs_total_time;
+
+    if (bsOpen) {
+        total += new Date() - bs_start_time;
+    }
+
+    let seconds = Math.floor(total / 1000);
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+
+    seconds %= 60;
+    minutes %= 60;
+
+    // NTtime.innerHTML
+    BStime.innerHTML =
+        "<br>" +
+        hours + "h " +
+        minutes + "m " +
+        seconds + "s";
+}
+
+function update_TLtime() {
+    let total = t_total_time;
+
+    if (tOpen) {
+        total += new Date() - t_start_time;
+    }
+
+    let seconds = Math.floor(total / 1000);
+    let minutes = Math.floor(seconds / 60);
+    let hours = Math.floor(minutes / 60);
+
+    seconds %= 60;
+    minutes %= 60;
+
+    // NTtime.innerHTML
+    TLtime.innerHTML =
+        "<br>" +
+        hours + "h " +
+        minutes + "m " +
+        seconds + "s";
+}
+
+setInterval(update_NTtime, 1000);
+setInterval(update_Ctime, 1000);
+setInterval(update_CCtime, 1000);
+setInterval(update_BStime, 1000);
+setInterval(update_TLtime, 1000);
 
 function select_element(element){
   if(!element){
@@ -221,11 +421,20 @@ if (clicker_window) clicker_window.addEventListener("mousedown", () => layer(cli
 
 if (cursor_changer_window) cursor_changer_window.addEventListener("mousedown", () => layer(cursor_changer_window));
 
+if (background_settings_window) background_settings_window.addEventListener("mousedown", () => layer(background_settings_window));
+
+if(terminal_window) terminal_window.addEventListener("mousedown", () => layer(terminal_window));
+
+if(screentime_window) screentime_window.addEventListener("mousedown", () => layer(screentime_window));
+
 var welcome_close = document.querySelector("#close_welcome");
 var welcome_open = document.querySelector("#open_welcome");
 var notetaker_close = document.querySelector("#notetaker_close");
 var clicker_close = document.querySelector("#clicker_close");
 var cursor_changer_close = document.querySelector("#CursorChanger_close");
+var background_settings_close = document.querySelector("#backgroundsetting_close")
+var terminal_close = document.querySelector("#close_terminal")
+var screentime_close = document.querySelector("#close_screentime")
 
 if(notetaker_close){
   notetaker_close.addEventListener("click", function(e){e.stopPropagation(); close_window(notetaker_window);});
@@ -245,6 +454,18 @@ if(welcome_open){
 
 if(cursor_changer_close){
   cursor_changer_close.addEventListener("click", function(e){e.stopPropagation(); close_window(cursor_changer_window)});
+}
+
+if(background_settings_close){
+  background_settings_close.addEventListener("click", function(e){e.stopPropagation(); close_window(background_settings_window)});
+}
+
+if(terminal_close){
+  terminal_close.addEventListener("click", function(e){e.stopPropagation(); close_window(terminal_window)});
+}
+
+if(screentime_close){
+  screentime_close.addEventListener("click", function(e){e.stopPropagation(); close_window(screentime_window)});
 }
 
 function set_note_up(index){
@@ -366,6 +587,294 @@ setInterval(function() {
   }
 }, 1000);
 
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+const previewImage = document.getElementById('preview-image');
+
+dropZone.addEventListener('click', () => fileInput.click());
+
+fileInput.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  handleImageFile(file);
+});
+
+dropZone.addEventListener('dragover', (e) => {
+  e.preventDefault();
+  dropZone.classList.add('dragover');
+});
+
+dropZone.addEventListener('dragleave', () => {
+  dropZone.classList.remove('dragover');
+});
+
+dropZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropZone.classList.remove('dragover');
+
+  const file = e.dataTransfer.files[0];
+  handleImageFile(file);
+});
+
+function handleImageFile(file) {
+  if (file && file.type.startsWith('image/')) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      previewImage.src = e.target.result;
+      previewImage.style.display = 'block';
+      document.body.style.backgroundImage = `url('${e.target.result}')`;
+      document.body.style.backgroundSize = 'cover';
+      document.body.style.backgroundPosition = 'center';
+    }
+    reader.readAsDataURL(file);
+
+  } else {
+    alert('Please select or drop a valid image file.');
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const terminalContainer = document.getElementById("terminal-type");
+
+    terminalContainer.addEventListener("keydown", (event) => {
+        if (event.target.classList.contains("terminal-input") && event.key === "Enter") {
+            const currentInput = event.target;
+            const userInputText = currentInput.value.trim();
+
+            if (userInputText !== "") {
+                console.log(userInputText);
+            }
+
+            if (userInputText == "/help"){
+              const output = document.createElement("div");
+              output.innerHTML = `
+                      <span class="prompt" style="background-color: #232323; color: greenyellow; border: #232323; white-space: pre;">Commands:<br>&#9;/help: shows all commands<br>&#9;/killAll: kills all windows<br>&#9;/open {user_input}: opens a window with that name<br>&#9;/openAll: opens all windows<br>&#9;/endOS: closes the OS
+                      </span>
+                      <input type="text" class="terminal-input" style="background-color: #232323; color: greenyellow; border: #232323" autofocus>
+              `;
+              terminalContainer.appendChild(output);
+            }
+
+            if (userInputText == "/killAll"){
+              close_window(welcome_window)
+              close_window(notetaker_window)
+              close_window(clicker_window)
+              close_window(cursor_changer_window)
+              close_window(background_settings_window)
+              close_window(screentime_window)
+              const output = document.createElement("div");
+              output.innerHTML = `
+                      <span class="prompt" style="background-color: #232323; color: greenyellow; border: #232323; white-space: pre;">Killed all windows
+                      </span>
+                      <input type="text" class="terminal-input" style="background-color: #232323; color: greenyellow; border: #232323" autofocus>
+              `;
+              terminalContainer.appendChild(output);
+            }
+
+            if (userInputText.startsWith("/open ")) {
+                const windowName = userInputText.split("/open ")[1].trim();
+                if (windowName === "welcome") {
+                    open_window(welcome_window)
+                    outputText = `Opened ${windowName} window`;
+                    const output = document.createElement("div");
+                    output.innerHTML = `
+                            <span class="prompt" style="background-color: #232323; color: greenyellow; border: #232323; white-space: pre;">Opened welcome
+                            </span>
+                            <input type="text" class="terminal-input" style="background-color: #232323; color: greenyellow; border: #232323" autofocus>
+                    `;
+                    terminalContainer.appendChild(output);
+                } else if (windowName === "notetaker") {
+                    open_window(notetaker_window)
+                    outputText = `Opened ${windowName} window`;
+                    const output = document.createElement("div");
+                    output.innerHTML = `
+                            <span class="prompt" style="background-color: #232323; color: greenyellow; border: #232323; white-space: pre;">Opened NoteTaker
+                            </span>
+                            <input type="text" class="terminal-input" style="background-color: #232323; color: greenyellow; border: #232323" autofocus>
+                    `;
+                    terminalContainer.appendChild(output);
+                } else if (windowName === "clicker") {
+                    open_window(clicker_window);
+                    outputText = `Opened ${windowName} window`;
+                    const output = document.createElement("div");
+                    output.innerHTML = `
+                            <span class="prompt" style="background-color: #232323; color: greenyellow; border: #232323; white-space: pre;">Opened Cucumber Clicker
+                            </span>
+                            <input type="text" class="terminal-input" style="background-color: #232323; color: greenyellow; border: #232323" autofocus>
+                    `;
+                    terminalContainer.appendChild(output);
+                } else if (windowName === "cursor_changer") {
+                    open_window(cursor_changer_window);
+                    outputText = `Opened ${windowName} window`;
+                    const output = document.createElement("div");
+                    output.innerHTML = `
+                            <span class="prompt" style="background-color: #232323; color: greenyellow; border: #232323; white-space: pre;">Opened Cursor Change
+                            </span>
+                            <input type="text" class="terminal-input" style="background-color: #232323; color: greenyellow; border: #232323" autofocus>
+                    `;
+                    terminalContainer.appendChild(output);
+                } else if (windowName === "background") {
+                    open_window(background_settings_window);
+                    outputText = `Opened ${windowName} window`;
+                    const output = document.createElement("div");
+                    output.innerHTML = `
+                            <span class="prompt" style="background-color: #232323; color: greenyellow; border: #232323; white-space: pre;">Opened Background Settings
+                            </span>
+                            <input type="text" class="terminal-input" style="background-color: #232323; color: greenyellow; border: #232323" autofocus>
+                    `;
+                    terminalContainer.appendChild(output);
+                } else if (windowName === "screentime"){
+                    open_window(screentime_window);
+                    outputText = `Opened ${windowName} window`;
+                    const output = document.createElement("div");
+                    output.innerHTML = `
+                            <span class="prompt" style="background-color: #232323; color: greenyellow; border: #232323; white-space: pre;">Opened Screentime
+                            </span>
+                            <input type="text" class="terminal-input" style="background-color: #232323; color: greenyellow; border: #232323" autofocus>
+                    `;
+                    terminalContainer.appendChild(output);
+                } else {
+                    outputText = `Unknown window: ${windowName}`;
+                    const output = document.createElement("div");
+                    output.innerHTML = `
+                            <span class="prompt" style="background-color: #232323; color: greenyellow; border: #232323; white-space: pre;">Unknown window<br>Do you mean:<br>   /open welcome: opens welcome window<br>   /open notetaker: opens notetaker window<br>   /open clicker: opens clicker window<br>   /open cursor_changer: opens cursor changer window<br>   /open background: opens background settings window<br>   /open screentime: opens screentime window
+                            </span>
+                            <input type="text" class="terminal-input" style="background-color: #232323; color: greenyellow; border: #232323" autofocus>
+                    `;
+                    terminalContainer.appendChild(output);
+                }
+            }
+
+            if(userInputText == "/openAll"){
+              open_window(welcome_window);
+              open_window(notetaker_window);
+              open_window(clicker_window);
+              open_window(cursor_changer_window);
+              open_window(background_settings_window);
+              open_window(screentime_window)
+              const output = document.createElement("div");
+              output.innerHTML = `
+                      <span class="prompt" style="background-color: #232323; color: greenyellow; border: #232323; white-space: pre;">Opened all windows
+                      </span>
+                      <input type="text" class="terminal-input" style="background-color: #232323; color: greenyellow; border: #232323" autofocus>
+              `;
+              terminalContainer.appendChild(output);
+            }
+
+            if(userInputText == "/endOS"){
+              window.close()
+            }
+
+            const immutableSpan = document.createElement("span");
+            immutableSpan.className = "immutable-text";
+            immutableSpan.innerText = currentInput.value;
+
+            currentInput.parentNode.replaceChild(immutableSpan, currentInput);
+
+            createNewRow(terminalContainer);
+        }
+    });
+});
+
+function createNewRow(container) {
+    const newRow = document.createElement("div");
+    newRow.className = "terminal-row";
+    newRow.innerHTML = `
+            <span class="prompt" style="background-color: #232323; color: greenyellow; border: #232323">></span>
+            <input type="text" class="terminal-input" style="background-color: #232323; color: greenyellow; border: #232323" autofocus>
+    `;
+    container.appendChild(newRow);
+    newRow.querySelector(".terminal-input").focus();
+}
+
+starttime = new Date()
+
+function update_screentime(){
+  var now = new Date();
+  var diff = now - starttime;
+
+  var seconds = Math.floor(diff / 1000);
+  var minutes = Math.floor(seconds / 60);
+  var hours = Math.floor(minutes / 60);
+
+  seconds %= 60;
+  minutes %= 60;
+
+  Ttime.innerHTML =
+    "<br>" +
+    hours + "h " +
+    minutes + "m " +
+    seconds + "s";
+}
+
+setInterval(update_screentime, 1000);
+
+var drag_d = document.querySelector("#drag_default")
+var drag_p = document.querySelector("#drag_pointer")
+var drag_c = document.querySelector("#drag_crosshair")
+var notetakerheader = document.querySelector("#notetakerheader")
+var clickerheader = document.querySelector("#clickerheader")
+var ccheader = document.querySelector("#CursorChangerheader")
+var bsheader = document.querySelector("#backgroundsettingheader")
+var tlheader = document.querySelector("#terminalheader")
+var screentimeheader = document.querySelector("#screentimeheader")
+
+if(notetakerheader){
+  notetakerheader.addEventListener("pointerdown", function(e){e.stopPropagation(); if(drag_d_e){default_cursor.style.display = "none"; drag_d.style.display = "block";} if(drag_p_e){pointer_cursor.style.display = "none"; drag_p.style.display = "block";} if(drag_c_e){crosshair_cursor.style.display = "none"; drag_c.style.display = "block";}});
+}
+
+if(notetakerheader){
+  notetakerheader.addEventListener("pointerup", function(e){e.stopPropagation(); if(drag_d_e){default_cursor.style.display = "block"; drag_d.style.display = "none"; } if(drag_p_e){pointer_cursor.style.display = "block"; drag_p.style.display = "none"; } if(drag_c_e){crosshair_cursor.style.display = "block"; drag_c.style.display = "none"; }});
+}
+//
+if(welcome_window){
+  welcome_window.addEventListener("pointerdown", function(e){e.stopPropagation(); if(drag_d_e){default_cursor.style.display = "none"; drag_d.style.display = "block";} if(drag_p_e){pointer_cursor.style.display = "none"; drag_p.style.display = "block";} if(drag_c_e){crosshair_cursor.style.display = "none"; drag_c.style.display = "block";}});
+}
+
+if(welcome_window){
+  welcome_window.addEventListener("pointerup", function(e){e.stopPropagation(); if(drag_d_e){default_cursor.style.display = "block"; drag_d.style.display = "none"; } if(drag_p_e){pointer_cursor.style.display = "block"; drag_p.style.display = "none"; } if(drag_c_e){crosshair_cursor.style.display = "block"; drag_c.style.display = "none"; }});
+}
+//
+if(clickerheader){
+  clickerheader.addEventListener("pointerdown", function(e){e.stopPropagation(); if(drag_d_e){default_cursor.style.display = "none"; drag_d.style.display = "block";} if(drag_p_e){pointer_cursor.style.display = "none"; drag_p.style.display = "block";} if(drag_c_e){crosshair_cursor.style.display = "none"; drag_c.style.display = "block";}});
+}
+
+if(clickerheader){
+  clickerheader.addEventListener("pointerup", function(e){e.stopPropagation(); if(drag_d_e){default_cursor.style.display = "block"; drag_d.style.display = "none"; } if(drag_p_e){pointer_cursor.style.display = "block"; drag_p.style.display = "none"; } if(drag_c_e){crosshair_cursor.style.display = "block"; drag_c.style.display = "none"; }});
+}
+//
+if(ccheader){
+  ccheader.addEventListener("pointerdown", function(e){e.stopPropagation(); if(drag_d_e){default_cursor.style.display = "none"; drag_d.style.display = "block";} if(drag_p_e){pointer_cursor.style.display = "none"; drag_p.style.display = "block";} if(drag_c_e){crosshair_cursor.style.display = "none"; drag_c.style.display = "block";}});
+}
+
+if(ccheader){
+  ccheader.addEventListener("pointerup", function(e){e.stopPropagation(); if(drag_d_e){default_cursor.style.display = "block"; drag_d.style.display = "none"; } if(drag_p_e){pointer_cursor.style.display = "block"; drag_p.style.display = "none"; } if(drag_c_e){crosshair_cursor.style.display = "block"; drag_c.style.display = "none"; }});
+}
+//
+if(bsheader){
+  bsheader.addEventListener("pointerdown", function(e){e.stopPropagation(); if(drag_d_e){default_cursor.style.display = "none"; drag_d.style.display = "block";} if(drag_p_e){pointer_cursor.style.display = "none"; drag_p.style.display = "block";} if(drag_c_e){crosshair_cursor.style.display = "none"; drag_c.style.display = "block";}});
+}
+
+if(bsheader){
+  bsheader.addEventListener("pointerup", function(e){e.stopPropagation(); if(drag_d_e){default_cursor.style.display = "block"; drag_d.style.display = "none"; } if(drag_p_e){pointer_cursor.style.display = "block"; drag_p.style.display = "none"; } if(drag_c_e){crosshair_cursor.style.display = "block"; drag_c.style.display = "none"; }});
+}
+//
+if(tlheader){
+  tlheader.addEventListener("pointerdown", function(e){e.stopPropagation(); if(drag_d_e){default_cursor.style.display = "none"; drag_d.style.display = "block";} if(drag_p_e){pointer_cursor.style.display = "none"; drag_p.style.display = "block";} if(drag_c_e){crosshair_cursor.style.display = "none"; drag_c.style.display = "block";}});
+}
+
+if(tlheader){
+  tlheader.addEventListener("pointerup", function(e){e.stopPropagation(); if(drag_d_e){default_cursor.style.display = "block"; drag_d.style.display = "none"; } if(drag_p_e){pointer_cursor.style.display = "block"; drag_p.style.display = "none"; } if(drag_c_e){crosshair_cursor.style.display = "block"; drag_c.style.display = "none"; }});
+}
+//
+if(screentimeheader){
+  screentimeheader.addEventListener("pointerdown", function(e){e.stopPropagation(); if(drag_d_e){default_cursor.style.display = "none"; drag_d.style.display = "block";} if(drag_p_e){pointer_cursor.style.display = "none"; drag_p.style.display = "block";} if(drag_c_e){crosshair_cursor.style.display = "none"; drag_c.style.display = "block";}});
+}
+
+if(screentimeheader){
+  screentimeheader.addEventListener("pointerup", function(e){e.stopPropagation(); if(drag_d_e){default_cursor.style.display = "block"; drag_d.style.display = "none"; } if(drag_p_e){pointer_cursor.style.display = "block"; drag_p.style.display = "none"; } if(drag_c_e){crosshair_cursor.style.display = "block"; drag_c.style.display = "none"; }});
+}
+//
+
 window.onload = function() {
   // center_window(welcome_window);
   // center_window(notetaker_window);
@@ -374,9 +883,13 @@ window.onload = function() {
   drag_element(notetaker_window);
   drag_element(clicker_window);
   drag_element(cursor_changer_window);
+  drag_element(background_settings_window)
+  drag_element(terminal_window)
+  drag_element(screentime_window)
   render_note_sidebar();
 
   default_cursor.style.display = "block";
+  //   drag_d.style.display = "block"
 
   document.addEventListener('mousemove', (e) => {
       default_cursor.style.left = `${e.pageX}px`;
@@ -393,20 +906,45 @@ window.onload = function() {
       crosshair_cursor.style.top = `${e.pageY}px`;
   });
 
+  document.addEventListener('mousemove', (e) => {
+    drag_d.style.left = `${e.pageX}px`;
+    drag_d.style.top = `${e.pageY}px`;
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    drag_p.style.left = `${e.pageX}px`;
+    drag_p.style.top = `${e.pageY}px`;
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    drag_c.style.left = `${e.pageX}px`;
+    drag_c.style.top = `${e.pageY}px`;
+  });
+
+
   default_cursor_button.addEventListener("click", function(){
     default_cursor.style.display = "block";
+    drag_d_e = true;
+    drag_p_e = false;
+    drag_c_e = false;
     pointer_cursor.style.display = "none";
     crosshair_cursor.style.display = "none";
   }
   );
   pointer_cursor_button.addEventListener("click", function(){
     default_cursor.style.display = "none";
+    drag_d_e = false;
+    drag_p_e = true;
+    drag_c_e = false;
     pointer_cursor.style.display = "block";
     crosshair_cursor.style.display = "none";
   }
   );
   crosshair_cursor_button.addEventListener("click", function(){
     default_cursor.style.display = "none";
+    drag_d_e = false;
+    drag_p_e = false;
+    drag_c_e = true;
     pointer_cursor.style.display = "none";
     crosshair_cursor.style.display = "block";
   }

@@ -6,10 +6,13 @@
     <title>CucumberOS</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<body  style="font-family: Helvetica, Noto Sans, sans-serif; background-color: cadetblue; background-image: url('./Background.jpg'); background-size: cover; margin: 0; padding: 0; overflow: hidden; height: 100vh; width: 100vw; user-select: none;">
+<body id="OS" style="font-family: Helvetica, Noto Sans, sans-serif; background-color: cadetblue; background-image: url('./Background.jpg'); background-size: cover; margin: 0; padding: 0; overflow: hidden; height: 100vh; width: 100vw; user-select: none;">
     <img src="D_cursor.png" id="default_cursor" class="cursor" style="display: none;" >
     <img src="P_cursor.png" id="pointer_cursor" class="cursor" style="display: none;" >
     <img src="C_cursor.png" id="crosshair_cursor" class="cursor" style="display: none;" >
+    <img src="drag_D.png" id="drag_default" class="cursor" style="display: none">
+    <img src="drag_P.png" id="drag_pointer" class="cursor" style="scale: 1.5; display: none">
+    <img src="drag_C.png" id="drag_crosshair" class="cursor" style="display: none">
     <div id="window" class="window" style="height: 260px; width: 280px; position: absolute; display: block; z-index: 2;">
         <div style="display: block; justify-content: space-between;">
             <p id="close_welcome" style="cursor: pointer;" class="close_button"></p>
@@ -88,6 +91,50 @@
                 <button id="crosshair_cursor_btn" style="flex: 1; background-color: #d97706; border-radius: 6px; border: none; color: white; font-weight: bold; cursor: pointer;">Crosshair</button>
             </div>
         </div>
+        <div id="backgroundsetting" class="window" style="height: 620px; width: 800px; display: none; padding-top: 30px;">
+            <div id="backgroundsettingheader" style="height: 30px; display: flex; justify-content: space-between; background-color: #44db80; color: white; align-items: center; box-sizing: border-box;">
+                <p class="window_header" style="margin: 6px; flex-grow: 1; cursor: move; font-weight: bold;">Background Settings</p>
+                <p id="backgroundsetting_close" class="close_button" style="margin-right: 10px"></p>
+            </div>
+            <div id="drop-zone">
+              <p>Drag & drop an image here, or <strong>click to browse</strong></p>
+              <input type="file" id="file-input" accept="image/*" style="display: none;">
+              <img id="preview-image" src="Background.jpg" alt="Image Preview" style="display: none; max-width: 100%; margin-top: 20px;">
+            </div>
+        </div>
+        <div id="terminal" class="window" style="height: 620px; width: 840px; position: absolute; background-color: #232323; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; z-index: 1; display: none;">
+            <div id="terminalheader" class="window_header" style="flex-shrink:0; width: 840px;position: relative; background-color: greenyellow; height: 30px; display: flex; justify-content: space-between; margin-left: 1px;">
+                <p class="window_header" style="margin: 6px; flex-grow: 1; cursor: move; font-weight: bold;">Cucumber Terminal</p>
+                <p id="close_terminal" class="close_button" style="margin-top: 6px; margin-right: 10px"></p>
+            </div>
+            <div class="scroll-container" id="terminal-type" style="border-color: #232323">
+                <p style="color: greenyellow"><br>==========================================================================================</p>
+                <pre style="color: greenyellow">                                                      CUCUMBER TERMINAL                                  </pre>
+                <p style="color: greenyellow">==========================================================================================</p>
+                <span class="prompt" style="background-color: #232323; color: greenyellow; border: #232323">></span>
+                <input type="text" class="terminal-input" style="background-color: #232323; color: greenyellow; border: #232323" autofocus>
+            </div>
+        </div>
+        <div id="screentime" class="window" style="display: none; height: 620px; width: 840px; position: absolute; background-color: whitesmoke; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; z-index: 1;">
+            <div id="screentimeheader" class="window_header" style="background-color: rgb(6 214 177); height: 30px; display: flex; justify-content: space-between;">
+                <p class="window_header" style="margin: 6px; flex-grow: 1; cursor: move; font-weight: bold; color: whitesmoke">Screentime</p>
+                <p id="close_screentime" class="close_button" style="margin-top: 6px; margin-right: 10px"></p>
+            </div>
+            <div class="scroll-container" style="border-color: whitesmoke">
+            <p style="font-size: 30px; margin-left: 17px">Total time:</p>
+            <div style="background-color: navajowhite; margin-left: 17px; height: 60px; width: 250px; border-radius: 16px; margin-top: -15px"><p id="Ttime" style="margin-left: 10px; margin-top: 15px;"><br>0h 0m 0s</p></div>
+            <p style="font-size: 15px; margin-left: 17px; margin-top: 30px">Notetaker screentime:</p>
+                <div style="background-color: navajowhite; margin-left: 17px; height: 60px; width: 250px; border-radius: 16px; margin-top: -1px"><p id="NTtime" style="margin-left: 10px; margin-top: 15px;"><br>0h 0m 0s</p></div>
+            <p style="font-size: 15px; margin-left: 17px; margin-top: 30px">Clicker screentime:</p>
+                <div style="background-color: navajowhite; margin-left: 17px; height: 60px; width: 250px; border-radius: 16px; margin-top: -1px"><p id="Ctime" style="margin-left: 10px; margin-top: 15px;"><br>0h 0m 0s</p></div>
+            <p style="font-size: 15px; margin-left: 17px; margin-top: 30px">Cursor Changer screentime:</p>
+                <div style="background-color: navajowhite; margin-left: 17px; height: 60px; width: 250px; border-radius: 16px; margin-top: -1px"><p id="CCtime" style="margin-left: 10px; margin-top: 15px;"><br>0h 0m 0s</p></div>
+            <p style="font-size: 15px; margin-left: 17px ; margin-top: 30px">Background settings screentime:</p>
+                <div style="background-color: navajowhite; margin-left: 17px; height: 60px; width: 250px; border-radius: 16px; margin-top: -1px"><p id="BStime" style="margin-left: 10px; margin-top: 15px;"><br>0h 0m 0s</p></div>
+            <p style="font-size: 15px; margin-left: 17px; margin-top: 30px">Terminal screentime:</p>
+                <div style="background-color: navajowhite; margin-left: 17px; height: 60px; width: 250px; border-radius: 16px; margin-top: -1px"><p id="TLtime" style="margin-left: 10px; margin-top: 15px;"><br>0h 0m 0s</p></div>
+            </div>
+        </div>
         <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap(this)" data-target="notetaker">
             <img src="./ICON1.png" alt="NoteTaker Icon" style="width: 64px; height: 64px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
             <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">NoteTaker</p>
@@ -99,7 +146,20 @@
         <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap(this)" data-target="CursorChanger">
             <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">🖱️</div>
             <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">Cursor Changer</p>
-    </div>
+        </div>
+        <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap(this)" data-target="backgroundsetting">
+            <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">🛠️</div>
+            <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">Background Settings</p>
+        </div>
+        <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap(this)" data-target="terminal">
+            <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">🖥️</div>
+            <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">Terminal</p>
+        </div>
+        <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap(this)" data-target="screentime">
+            <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">⏳</div>
+            <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">Screentime</p>
+        </div>
     <script src="script.js"></script>
+    </div>
 </body>
 </html>
