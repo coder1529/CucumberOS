@@ -52,6 +52,15 @@ var screentime_window = document.querySelector("#screentime")
 var select_bar = document.querySelector("#top");
 var note_list_container = document.querySelector("#noteList");
 var note_contents_container = document.querySelector("#notesContent");
+var right_click_box = document.querySelector("#rightclick")
+var add_new = document.querySelector("#addnew")
+var add_folder = document.querySelector("#addfolder")
+var apps = document.querySelector("#apps")
+var pickle_jar = document.querySelector("#picklejar")
+var pickle_jar_header = document.querySelector("#picklejarheader")
+var pickle_jar_desktop = document.querySelector("#picklejar-desktop")
+var pickle_jar_desktop_text = document.querySelector("#picklejar-desktop-text")
+var pickle_jar_desktop_text_container = document.querySelector("#picklejar-desktop-text-container")
 let notetakerOpen = false;
 let clickerOpen = false;
 let ccOpen = false;
@@ -875,6 +884,87 @@ if(screentimeheader){
 }
 //
 
+if(pickle_jar_header){
+  pickle_jar_header.addEventListener("pointerdown", function(e){e.stopPropagation(); if(drag_d_e){default_cursor.style.display = "none"; drag_d.style.display = "block";} if(drag_p_e){pointer_cursor.style.display = "none"; drag_p.style.display = "block";} if(drag_c_e){crosshair_cursor.style.display = "none"; drag_c.style.display = "block";}});
+}
+
+if(pickle_jar_header){
+  pickle_jar_header.addEventListener("pointerup", function(e){e.stopPropagation(); if(drag_d_e){default_cursor.style.display = "block"; drag_d.style.display = "none"; } if(drag_p_e){pointer_cursor.style.display = "block"; drag_p.style.display = "none"; } if(drag_c_e){crosshair_cursor.style.display = "block"; drag_c.style.display = "none"; }});
+}
+//
+
+var right_click_box_open = false;
+
+OS.addEventListener("contextmenu", (event) => {
+
+    event.preventDefault();
+
+    if (event.srcElement.id === "apps" && event.srcElement.id !== "window"){
+        right_click_box.style.left = `${event.pageX + 50}px`;
+        right_click_box.style.top = `${event.pageY + 80}px`;
+
+        if (!right_click_box_open){
+            right_click_box.style.display = "flex";
+            add_folder.style.display = "none";
+            add_new.style.background = "whitesmoke";
+            right_click_box_open = true;
+        }
+        else{
+            right_click_box.style.display = "none";
+            right_click_box_open = false;
+            setTimeout(() => {right_click_box.style.display = "flex";}, 10);
+            right_click_box_open = true;
+        }
+    }
+    else{
+        right_click_box.style.display = "none";
+        right_click_box_open = false;
+    }
+});
+
+add_new.addEventListener('mouseenter', () => {
+    console.log('Mouse entered - Hover started');
+    add_new.style.background = "#cfdde2"
+    add_folder.style.display = "flex"
+});
+add_new.addEventListener('mouseleave', () => {
+    console.log('Mouse left - Hover ended');
+    setTimeout(() => add_new.style.background = "whitesmoke", 100)
+});
+add_folder.addEventListener('mouseenter', () => {
+    console.log('Mouse entered - Hover started');
+    add_folder.style.background = "#cfdde2"
+});
+add_folder.addEventListener('mouseleave', () => {
+    console.log('Mouse left - Hover ended');
+    add_folder.style.background = "whitesmoke"
+});
+
+var new_folder_num = 0
+
+add_folder.addEventListener('click', function (){
+    new_folder_num += 1;
+    const new_folder = document.createElement('div')
+    new_folder.classList = "desktop-icon"
+    new_folder.style = "width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;"
+    const new_folder_icon = document.createElement('div')
+    new_folder_icon.style = "width: 64px; height: 64px; border-radius: 16px; background-color: #19e0ae; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);"
+    const new_folder_icon_text = document.createElement('p')
+    new_folder_icon_text.style.marginTop = "30px"
+    new_folder_icon_text.textContent = "📁"
+    new_folder_icon.appendChild(new_folder_icon_text)
+    const new_folder_name = document.createElement('p')
+    new_folder_name.style = "color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;"
+    new_folder_name.textContent = "new folder " + new_folder_num
+    new_folder.appendChild(new_folder_icon)
+    new_folder.appendChild(new_folder_name)
+    new_folder.id = new_folder_num
+    new_folder.addEventListener("click", function(){icon_tap(this)})
+    apps.appendChild(new_folder)
+})
+
+document.addEventListener("click", (e) => {if (e.target === pickle_jar_desktop || e.target === pickle_jar_desktop_text || e.target === pickle_jar_desktop_text_container){pickle_jar_desktop_text_container.style.backgroundColor = "rgb(204, 232, 255)"}})
+
 window.onload = function() {
   // center_window(welcome_window);
   // center_window(notetaker_window);
@@ -886,6 +976,7 @@ window.onload = function() {
   drag_element(background_settings_window)
   drag_element(terminal_window)
   drag_element(screentime_window)
+  drag_element(pickle_jar)
   render_note_sidebar();
 
   default_cursor.style.display = "block";
@@ -921,6 +1012,12 @@ window.onload = function() {
     drag_c.style.top = `${e.pageY}px`;
   });
 
+document.addEventListener('click', (e) => {
+  if (e.target.id !== "rightclick" && e.target.id !== "addnew") {
+    right_click_box.style.display = "none";
+    right_click_box_open = false;
+  }
+});
 
   default_cursor_button.addEventListener("click", function(){
     default_cursor.style.display = "block";

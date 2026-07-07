@@ -6,7 +6,7 @@
     <title>CucumberOS</title>
     <link rel="stylesheet" type="text/css" href="style.css">
 </head>
-<body id="OS" style="font-family: Helvetica, Noto Sans, sans-serif; background-color: cadetblue; background-image: url('./Background.jpg'); background-size: cover; margin: 0; padding: 0; overflow: hidden; height: 100vh; width: 100vw; user-select: none;">
+<body id="OS" style="font-family: Helvetica, Noto Sans, sans-serif; background-color: cadetblue; background-image: url('./pickle-background-bright.svg'); background-size: cover; margin: 0; padding: 0; overflow: hidden; height: 100vh; width: 100vw; user-select: none;">
     <img src="D_cursor.png" id="default_cursor" class="cursor" style="display: none;" >
     <img src="P_cursor.png" id="pointer_cursor" class="cursor" style="display: none;" >
     <img src="C_cursor.png" id="crosshair_cursor" class="cursor" style="display: none;" >
@@ -28,7 +28,12 @@
         <p style="margin: 0;">🥒 CUCUMBERS! 🥒</p>
         <p id="TIME" style="margin: 0;">Time</p>
     </div>
-    <div id="apps" style="padding-top: 65px; padding-left: 30px; box-sizing: border-box; height: 100%; display: flex; gap: 25px; align-items: flex-start; position: relative;">
+    <div id="rightclick" class="window" style="height:120px; width: 79.9px; display: none; z-index: 1;">
+        <div id="addnew" style="font-size: 13px; margin-left: -0.9px; padding: 10px; height: 20px">Add new...
+            <div id="addfolder" class="window" style="margin-left: 110px; margin-top: -50px; width:70px; display: none">New folder</div>
+        </div>
+    </div>
+    <div id="apps" style="align-content: flex-start; flex-wrap: wrap; padding-top: 65px; padding-left: 30px; box-sizing: border-box; height: 100%; display: flex; gap: 25px; align-items: flex-start; position: relative;">
         <div id="notetaker" class="window" style="height: 620px; width: 840px; display: none; position: absolute; background-color: #f0f0f0; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; z-index: 1;">
             <div style="display: flex; justify-content: space-between; background-color: #333; color: white; padding: 8px 12px; align-items: center; box-sizing: border-box;">
                 <p id="notetakerheader" class="window_header" style="margin: 0; flex-grow: 1; cursor: move; font-weight: bold;">Note Taker</p>
@@ -133,6 +138,21 @@
                 <div style="background-color: navajowhite; margin-left: 17px; height: 60px; width: 250px; border-radius: 16px; margin-top: -1px"><p id="BStime" style="margin-left: 10px; margin-top: 15px;"><br>0h 0m 0s</p></div>
             <p style="font-size: 15px; margin-left: 17px; margin-top: 30px">Terminal screentime:</p>
                 <div style="background-color: navajowhite; margin-left: 17px; height: 60px; width: 250px; border-radius: 16px; margin-top: -1px"><p id="TLtime" style="margin-left: 10px; margin-top: 15px;"><br>0h 0m 0s</p></div>
+            </div>
+        </div>
+        <div id="picklejar" class="window" style="height: 360px; width: 540px; resize: both; overflow: auto; display: flex; flex-direction: column;">
+            <div id="picklejarheader" class="window_header" style="background-color: rgb(6 214 177); height: 30px; display: flex; justify-content: space-between; margin-left: 5px; flex-shrink: 0;">
+                <p style="margin: 6px; flex-grow: 1; cursor: move; font-weight: bold; color: whitesmoke">Pickle Jar</p>
+                <p class="close_button" style="margin-right: 10px; margin-top: 6px"></p>
+            </div>
+            <div style="display: flex; flex: 1; min-height: 0;">
+                <nav id="sidebar" style="margin-top: 10px; margin-bottom: -10px; border-right: 2px solid #111111; padding: 0 10px; width: 130px; flex-shrink: 0; margin-left: -18px">
+                    <ul id="picklejar-desktop" style="list-style: none; margin: 0; padding: 0;">
+                        <a id="picklejar-desktop-text-container" class="sidebar-item" style="display: block; margin-left: 13px"><p id="picklejar-desktop-text" style="margin-left: -5px; height: 0px; margin-top: -4px">Desktop</p></a>
+                    </ul>
+                </nav>
+                <div id="Picklejar-main" style="flex: 1; overflow: auto;">
+                </div>
             </div>
         </div>
         <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap(this)" data-target="notetaker">

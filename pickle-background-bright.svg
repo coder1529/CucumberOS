@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1200" viewBox="0 0 1600 1200">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4a3a26"/>
+      <stop offset="100%" stop-color="#5a4630"/>
+    </linearGradient>
+
+    <linearGradient id="pickleBody" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#9fce77"/>
+      <stop offset="55%" stop-color="#77a851"/>
+      <stop offset="100%" stop-color="#5c8a3f"/>
+    </linearGradient>
+
+    <linearGradient id="pickleHighlight" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#e6f5d2" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#e6f5d2" stop-opacity="0"/>
+    </linearGradient>
+
+    <g id="pickle">
+      <path d="M -38 0
+               C -38 -34, -20 -58, 0 -58
+               C 20 -58, 38 -34, 38 0
+               C 38 34, 20 58, 0 58
+               C -20 58, -38 34, -38 0 Z"
+            fill="url(#pickleBody)" stroke="#4a6e38" stroke-width="2"/>
+      <path d="M -30 -40 C -14 -50, 14 -50, 30 -40" fill="none" stroke="url(#pickleHighlight)" stroke-width="10" stroke-linecap="round"/>
+      <g fill="#4a6e38" opacity="0.5">
+        <ellipse cx="-14" cy="-30" rx="3" ry="5"/>
+        <ellipse cx="10" cy="-18" rx="3" ry="5"/>
+        <ellipse cx="-18" cy="-2" rx="3" ry="5"/>
+        <ellipse cx="16" cy="6" rx="3" ry="5"/>
+        <ellipse cx="-8" cy="20" rx="3" ry="5"/>
+        <ellipse cx="14" cy="34" rx="3" ry="5"/>
+        <ellipse cx="-16" cy="42" rx="3" ry="5"/>
+        <ellipse cx="2" cy="-46" rx="3" ry="5"/>
+      </g>
+      <line x1="0" y1="-58" x2="0" y2="58" stroke="#3c5c30" stroke-width="1" opacity="0.35"/>
+    </g>
+  </defs>
+
+  <rect x="0" y="0" width="1600" height="1200" fill="url(#bg)"/>
+
+  <g opacity="0.85">
+    <use href="#pickle" x="80"  y="90"  transform="rotate(-18 80 90)"/>
+    <use href="#pickle" x="340" y="60"  transform="rotate(24 340 60)"/>
+    <use href="#pickle" x="600" y="110" transform="rotate(-8 600 110)"/>
+    <use href="#pickle" x="860" y="70"  transform="rotate(30 860 70)"/>
+    <use href="#pickle" x="1120" y="100" transform="rotate(-22 1120 100)"/>
+    <use href="#pickle" x="1380" y="65" transform="rotate(14 1380 65)"/>
+
+    <use href="#pickle" x="200" y="280" transform="rotate(12 200 280)"/>
+    <use href="#pickle" x="460" y="250" transform="rotate(-26 460 250)"/>
+    <use href="#pickle" x="720" y="300" transform="rotate(20 720 300)"/>
+    <use href="#pickle" x="980" y="260" transform="rotate(-14 980 260)"/>
+    <use href="#pickle" x="1240" y="290" transform="rotate(8 1240 290)"/>
+    <use href="#pickle" x="1500" y="255" transform="rotate(-30 1500 255)"/>
+
+    <use href="#pickle" x="80"  y="470" transform="rotate(26 80 470)"/>
+    <use href="#pickle" x="340" y="440" transform="rotate(-10 340 440)"/>
+    <use href="#pickle" x="600" y="490" transform="rotate(16 600 490)"/>
+    <use href="#pickle" x="860" y="450" transform="rotate(-24 860 450)"/>
+    <use href="#pickle" x="1120" y="480" transform="rotate(6 1120 480)"/>
+    <use href="#pickle" x="1380" y="445" transform="rotate(-16 1380 445)"/>
+
+    <use href="#pickle" x="200" y="660" transform="rotate(-20 200 660)"/>
+    <use href="#pickle" x="460" y="630" transform="rotate(28 460 630)"/>
+    <use href="#pickle" x="720" y="680" transform="rotate(-6 720 680)"/>
+    <use href="#pickle" x="980" y="640" transform="rotate(18 980 640)"/>
+    <use href="#pickle" x="1240" y="670" transform="rotate(-28 1240 670)"/>
+    <use href="#pickle" x="1500" y="635" transform="rotate(10 1500 635)"/>
+
+    <use href="#pickle" x="80"  y="850" transform="rotate(14 80 850)"/>
+    <use href="#pickle" x="340" y="820" transform="rotate(-22 340 820)"/>
+    <use href="#pickle" x="600" y="870" transform="rotate(8 600 870)"/>
+    <use href="#pickle" x="860" y="830" transform="rotate(-16 860 830)"/>
+    <use href="#pickle" x="1120" y="860" transform="rotate(24 1120 860)"/>
+    <use href="#pickle" x="1380" y="825" transform="rotate(-8 1380 825)"/>
+
+    <use href="#pickle" x="200" y="1040" transform="rotate(22 200 1040)"/>
+    <use href="#pickle" x="460" y="1010" transform="rotate(-14 460 1010)"/>
+    <use href="#pickle" x="720" y="1060" transform="rotate(30 720 1060)"/>
+    <use href="#pickle" x="980" y="1020" transform="rotate(-6 980 1020)"/>
+    <use href="#pickle" x="1240" y="1050" transform="rotate(16 1240 1050)"/>
+    <use href="#pickle" x="1500" y="1015" transform="rotate(-24 1500 1015)"/>
+  </g>
+
+</svg>
