@@ -719,7 +719,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (userInputText == "/help"){
               const output = document.createElement("div");
               output.innerHTML = `
-                      <span class="prompt" style="background-color: #232323; color: greenyellow; border: #232323; white-space: pre;">Commands:<br>&#9;/help: shows all commands<br>&#9;/killAll: kills all windows<br>&#9;/open {user_input}: opens a window with that name<br>&#9;/openAll: opens all windows<br>&#9;/endOS: closes the OS
+                      <span class="prompt" style="background-color: #232323; color: greenyellow; border: #232323; white-space: pre;">Commands:<br>&#9;/help: shows all commands<br>&#9;/killAll: kills all windows<br>&#9;/open {user_input}: opens a window with that name<br>&#9;/openAll: opens all windows<br>&#9;/newfolder {name}: creates a new folder<br>&#9;/listfolders: lists all folders<br>&#9;/endOS: closes the OS
                       </span>
                       <input type="text" class="terminal-input" style="background-color: #232323; color: greenyellow; border: #232323" autofocus>
               `;
@@ -804,11 +804,31 @@ document.addEventListener("DOMContentLoaded", () => {
                             <input type="text" class="terminal-input" style="background-color: #232323; color: greenyellow; border: #232323" autofocus>
                     `;
                     terminalContainer.appendChild(output);
+                } else if (windowName === "picklejar"){
+                    open_window(pickle_jar);
+                    outputText = `Opened ${windowName} window`;
+                    const output = document.createElement("div");
+                    output.innerHTML = `
+                            <span class="prompt" style="background-color: #232323; color: greenyellow; border: #232323; white-space: pre;">Opened Pickle Jar
+                            </span>
+                            <input type="text" class="terminal-input" style="background-color: #232323; color: greenyellow; border: #232323" autofocus>
+                    `;
+                    terminalContainer.appendChild(output);
+                } else if (windowName === "folders"){
+                    open_pickle_jar_folders();
+                    outputText = `Opened ${windowName} window`;
+                    const output = document.createElement("div");
+                    output.innerHTML = `
+                            <span class="prompt" style="background-color: #232323; color: greenyellow; border: #232323; white-space: pre;">Opened Pickle Jar Folders
+                            </span>
+                            <input type="text" class="terminal-input" style="background-color: #232323; color: greenyellow; border: #232323" autofocus>
+                    `;
+                    terminalContainer.appendChild(output);
                 } else {
                     outputText = `Unknown window: ${windowName}`;
                     const output = document.createElement("div");
                     output.innerHTML = `
-                            <span class="prompt" style="background-color: #232323; color: greenyellow; border: #232323; white-space: pre;">Unknown window<br>Do you mean:<br>   /open welcome: opens welcome window<br>   /open notetaker: opens notetaker window<br>   /open clicker: opens clicker window<br>   /open cursor_changer: opens cursor changer window<br>   /open background: opens background settings window<br>   /open screentime: opens screentime window
+                            <span class="prompt" style="background-color: #232323; color: greenyellow; border: #232323; white-space: pre;">Unknown window<br>Do you mean:<br>   /open welcome: opens welcome window<br>   /open notetaker: opens notetaker window<br>   /open clicker: opens clicker window<br>   /open cursor_changer: opens cursor changer window<br>   /open background: opens background settings window<br>   /open screentime: opens screentime window<br>   /open picklejar: opens pickle jar window<br>   /open folders: opens pickle jar straight to folders
                             </span>
                             <input type="text" class="terminal-input" style="background-color: #232323; color: greenyellow; border: #232323" autofocus>
                     `;
@@ -829,6 +849,47 @@ document.addEventListener("DOMContentLoaded", () => {
                       </span>
                       <input type="text" class="terminal-input" style="background-color: #232323; color: greenyellow; border: #232323" autofocus>
               `;
+              terminalContainer.appendChild(output);
+            }
+
+            if(userInputText === "/newfolder" || userInputText.startsWith("/newfolder ")){
+              const folderName = userInputText.slice("/newfolder".length).trim();
+              const created_folder = create_folder(folderName);
+              const created_name = created_folder.querySelector('[id^="folder_name_"]').textContent;
+              const output = document.createElement("div");
+              const span = document.createElement("span");
+              span.className = "prompt";
+              span.style = "background-color: #232323; color: greenyellow; border: #232323; white-space: pre;";
+              span.textContent = `Created folder "${created_name}"`;
+              const newInput = document.createElement("input");
+              newInput.type = "text";
+              newInput.className = "terminal-input";
+              newInput.style = "background-color: #232323; color: greenyellow; border: #232323";
+              newInput.autofocus = true;
+              output.appendChild(span);
+              output.appendChild(document.createElement("br"));
+              output.appendChild(newInput);
+              terminalContainer.appendChild(output);
+            }
+
+            if(userInputText == "/listfolders"){
+              const folder_names = Object.keys(folders)
+                .map((key) => folders[key])
+                .filter((f) => f && f.isConnected)
+                .map((f) => f.querySelector('[id^="folder_name_"]').textContent);
+              const output = document.createElement("div");
+              const span = document.createElement("span");
+              span.className = "prompt";
+              span.style = "background-color: #232323; color: greenyellow; border: #232323; white-space: pre;";
+              span.textContent = folder_names.length ? ("Folders:\n" + folder_names.map((n) => "\t" + n).join("\n")) : "No folders yet";
+              const newInput = document.createElement("input");
+              newInput.type = "text";
+              newInput.className = "terminal-input";
+              newInput.style = "background-color: #232323; color: greenyellow; border: #232323";
+              newInput.autofocus = true;
+              output.appendChild(span);
+              output.appendChild(document.createElement("br"));
+              output.appendChild(newInput);
               terminalContainer.appendChild(output);
             }
 
@@ -1016,7 +1077,7 @@ let folders = {}
 var change_name_folder_num = 0
 var change_icon_folder_num = 0
 
-add_folder.addEventListener('click', function (){
+function create_folder(custom_name){
     new_folder_num += 1;
     const folder_number = new_folder_num;
     const new_folder = document.createElement('div')
@@ -1032,7 +1093,7 @@ add_folder.addEventListener('click', function (){
     new_folder_icon.appendChild(new_folder_icon_text)
     const new_folder_name = document.createElement('p')
     new_folder_name.style = "color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;"
-    new_folder_name.textContent = "new folder " + new_folder_num
+    new_folder_name.textContent = (custom_name && custom_name.trim()) ? custom_name.trim() : "new folder " + new_folder_num
     new_folder_name.classList = "folder-icon"
     new_folder.appendChild(new_folder_icon)
     new_folder.appendChild(new_folder_name)
@@ -1053,6 +1114,12 @@ add_folder.addEventListener('click', function (){
     apps.appendChild(new_folder)
     folders["folder_"+new_folder_num] = new_folder;
 
+    open_pickle_jar_folders();
+
+    return new_folder;
+}
+
+function open_pickle_jar_folders(){
     open_window(pickle_jar);
     pickle_jar_main_desktop.style.display = "none";
     pickle_jar_desktop_applications_list.style.display = "none";
@@ -1060,6 +1127,10 @@ add_folder.addEventListener('click', function (){
     pickle_jar_saves_list.style.display = "none";
     render_pickle_jar_folders();
     folder_list.style.display = "flex";
+}
+
+add_folder.addEventListener('click', function (){
+    create_folder();
 })
 
 function render_pickle_jar_folders(){
