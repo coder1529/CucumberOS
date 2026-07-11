@@ -75,6 +75,8 @@ var pickle_jar_saves_list = document.querySelector("#saves-list")
 var folder_change_box = document.querySelector("#folderchange")
 var change_name_box = document.querySelector("#changename")
 var folder_list = document.querySelector("#folder-list")
+var pickle_jar_folder_page = document.querySelector("#folder-page")
+var pickle_jar_folder_page_title = document.querySelector("#folder-page-title")
 let notetakerOpen = false;
 let clickerOpen = false;
 let ccOpen = false;
@@ -410,6 +412,14 @@ function select_element2(element){
   selected_icon = element;
 }
 
+function select_element_folders(element){
+  if(!element){
+    return;
+  }
+  element.classList.add("selected");
+  selected_icon = element;
+}
+
 function deselect_element(element){
   if(!element){
     return;
@@ -423,6 +433,14 @@ function deselect_element2(element){
     return;
   }
   element.classList.remove("selected2");
+  selected_icon = undefined;
+}
+
+function deselect_element_folders(element){
+  if(!element){
+    return;
+  }
+  element.classList.remove("selected");
   selected_icon = undefined;
 }
 
@@ -467,6 +485,51 @@ function icon_tap2(element){
       prev.classList.remove("selected2");
     }
     select_element2(element);
+  }
+}
+
+function icon_tap_folder(element){
+  if(element.classList.contains("selected")){
+    open_folder_page(element.dataset.folderKey);
+    deselect_element_folders(element);
+  }
+  else{
+    var prev = document.querySelector(".selected");
+    if(prev){
+      prev.classList.remove("selected");
+    }
+    select_element_folders(element);
+  }
+}
+
+function get_folder_display_name(source_folder){
+  var name_el = source_folder ? source_folder.querySelector('[id^="folder_name_"]') : null;
+  if(!name_el) return "Folder";
+  return name_el.tagName === "INPUT" ? name_el.value : name_el.textContent;
+}
+
+var current_folder_page_key = null;
+
+function open_folder_page(folder_key){
+  var source_folder = folders[folder_key];
+
+  open_window(pickle_jar);
+  pickle_jar_main_desktop.style.display = "none";
+  pickle_jar_desktop_applications_list.style.display = "none";
+  pickle_jar_notetaker_list.style.display = "none";
+  pickle_jar_saves_list.style.display = "none";
+  folder_list.style.display = "none";
+  current_folder_page_key = folder_key;
+  pickle_jar_folder_page_title.textContent = get_folder_display_name(source_folder);
+  pickle_jar_folder_page.style.display = "flex";
+}
+
+function sync_pickle_jar_folder_views(folder_key){
+  if(folder_key && folder_key === current_folder_page_key && pickle_jar_folder_page.style.display === "flex"){
+    pickle_jar_folder_page_title.textContent = get_folder_display_name(folders[folder_key]);
+  }
+  if(folder_list && folder_list.style.display === "flex"){
+    render_pickle_jar_folders();
   }
 }
 
@@ -1100,8 +1163,9 @@ function create_folder(custom_name){
     new_folder.id = new_folder_num
     new_folder_name.id = "folder_name_" + new_folder_num
     new_folder_icon_text.id = "folder_icon_" + (new_folder_num + 1);
+    new_folder.dataset.folderKey = "folder_" + new_folder_num;
     new_folder.addEventListener("click", function(){
-        icon_tap(this);
+        icon_tap_folder(this);
         console.log("done " + folder_number);
     })
     new_folder.addEventListener("contextmenu", function(){
@@ -1114,7 +1178,7 @@ function create_folder(custom_name){
     apps.appendChild(new_folder)
     folders["folder_"+new_folder_num] = new_folder;
 
-    open_pickle_jar_folders();
+    // open_pickle_jar_folders();
 
     return new_folder;
 }
@@ -1125,6 +1189,7 @@ function open_pickle_jar_folders(){
     pickle_jar_desktop_applications_list.style.display = "none";
     pickle_jar_notetaker_list.style.display = "none";
     pickle_jar_saves_list.style.display = "none";
+    pickle_jar_folder_page.style.display = "none";
     render_pickle_jar_folders();
     folder_list.style.display = "flex";
 }
@@ -1140,7 +1205,6 @@ function render_pickle_jar_folders(){
         var source_folder = folders[key];
         if(!source_folder || !source_folder.isConnected) return;
         var icon_text_el = source_folder.querySelector('[id^="folder_icon_"]');
-        var name_el = source_folder.querySelector('[id^="folder_name_"]');
 
         var file_icon = document.createElement("div");
         file_icon.className = "desktop-icon";
@@ -1152,22 +1216,25 @@ function render_pickle_jar_folders(){
 
         var name_p = document.createElement("p");
         name_p.style = "color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold; word-break: break-word;";
-        name_p.textContent = name_el ? name_el.textContent : "new folder";
+        name_p.textContent = get_folder_display_name(source_folder);
 
         file_icon.appendChild(icon_box);
         file_icon.appendChild(name_p);
+        file_icon.addEventListener("click", function(){
+            open_folder_page(key);
+        });
         folder_list.appendChild(file_icon);
     });
 }
 
 pickle_jar_desktop_folders.addEventListener("click", function(){
-    pickle_jar_main_desktop.style.display = "none";
-    render_pickle_jar_folders();
-    folder_list.style.display = "flex";
+    open_pickle_jar_folders();
 })
 
 change_name_box.addEventListener("click", (e) => {
     var element = document.getElementById(change_name_folder_num);
+    var folder_div = element.closest('[data-folder-key]');
+    var folder_key = folder_div ? folder_div.dataset.folderKey : null;
     var input_element = document.createElement("input");
     input_element.type = 'text';
     input_element.value = element.textContent;
@@ -1176,6 +1243,7 @@ change_name_box.addEventListener("click", (e) => {
     element.replaceWith(input_element);
     input_element.focus();
     input_element.select();
+    sync_pickle_jar_folder_views(folder_key);
 
     function finish_rename(){
         var new_name = document.createElement('p');
@@ -1184,8 +1252,12 @@ change_name_box.addEventListener("click", (e) => {
         new_name.id = input_element.id;
         new_name.textContent = input_element.value.trim() || element.textContent;
         input_element.replaceWith(new_name);
+        sync_pickle_jar_folder_views(folder_key);
     }
 
+    input_element.addEventListener("input", () => {
+        sync_pickle_jar_folder_views(folder_key);
+    });
     input_element.addEventListener("keydown", (ev) => {
         if (ev.key === "Enter") input_element.blur();
     });
@@ -1202,6 +1274,7 @@ document.addEventListener("click", (e) => {
         pickle_jar_notetaker_list.style.display = "none";
         pickle_jar_saves_list.style.display = "none";
         folder_list.style.display = "none";
+        pickle_jar_folder_page.style.display = "none";
         pickle_jar_main_desktop.style.display = "flex";
         click_num = 0;
         saves_click_num = 0;
