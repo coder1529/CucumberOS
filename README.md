@@ -4,9 +4,12 @@
 - Custom OS with the theme of a cucumber
 - Contains advanced note taker app
 - Contains a Clicker game
-- NEW! : Background settings
-- NEW! : Terminal
-- NEW! : Screentime
+- Contains : Background settings
+- Contains : Terminal
+- Contains : Screentime
+- NEW! : Pickle jar
+- NEW! : Add folders
+- NEW! : Edit folders
 
 ## WHY A CUCUMBER?
 - I really like the vegetable Cucumber
@@ -42,7 +45,24 @@
 - Monitors every single app
 - Shows you all the total time you have been on the os
 
-## NEXT GOALS
+## WHAT IS THE PICKLE JAR APP?
+- Contains applications from the desktop
+- Contains linked files with the advanced notetaker app
+- Contains linked folders from the desktop
+
+## WHAT IS THE ADD FOLDERS SKILL?
+- You can add folders to the desktop
+- Custom right click event
+- Creates customizable folders
+
+## WHAT IS THE EDIT FOLDERS SKILL?
+- Allows you to change names of the folders
+- Allows you to change icons of the folders
+- Custom right click event
+- Changes names in the desktop folders too
+- Changes icons in the desktop folders too
+
+# NEXT GOALS
 - Make a Cyberdeck powered by Raspberry pi 5
 - Attend the outpost Hackathon with the Cyberdeck as a x - tier project (maybe)
 - CONTINUE MY DREAM TO MIT!
