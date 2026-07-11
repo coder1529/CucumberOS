@@ -61,6 +61,20 @@ var pickle_jar_header = document.querySelector("#picklejarheader")
 var pickle_jar_desktop = document.querySelector("#picklejar-desktop")
 var pickle_jar_desktop_text = document.querySelector("#picklejar-desktop-text")
 var pickle_jar_desktop_text_container = document.querySelector("#picklejar-desktop-text-container")
+var pickle_jar_main_desktop = document.querySelector("#picklejar-main-desktop")
+var pickle_jar_desktop_applications = document.querySelector("#applications")
+var pickle_jar_desktop_applications_icon = document.querySelector("#applications_icon")
+var pickle_jar_desktop_applications_icon_e = document.querySelector("#applications_icon_e")
+var pickle_jar_desktop_applications_text = document.querySelector("#applications_text")
+var pickle_jar_desktop_applications_list = document.querySelector("#applications-list")
+var pickle_jar_desktop_folders = document.querySelector("#folders")
+var pickle_jar_notetaker_folder = document.querySelector("#_Notetaker")
+var pickle_jar_notetaker_list = document.querySelector("#_notetaker-list")
+var pickle_jar_saves_folder = document.querySelector("#saves")
+var pickle_jar_saves_list = document.querySelector("#saves-list")
+var folder_change_box = document.querySelector("#folderchange")
+var change_name_box = document.querySelector("#changename")
+var folder_list = document.querySelector("#folder-list")
 let notetakerOpen = false;
 let clickerOpen = false;
 let ccOpen = false;
@@ -388,11 +402,27 @@ function select_element(element){
   selected_icon = element;
 }
 
+function select_element2(element){
+  if(!element){
+    return;
+  }
+  element.classList.add("selected2");
+  selected_icon = element;
+}
+
 function deselect_element(element){
   if(!element){
     return;
   }
   element.classList.remove("selected");
+  selected_icon = undefined;
+}
+
+function deselect_element2(element){
+  if(!element){
+    return;
+  }
+  element.classList.remove("selected2");
   selected_icon = undefined;
 }
 
@@ -422,6 +452,24 @@ function icon_tap(element){
   }
 }
 
+function icon_tap2(element){
+  if(element.classList.contains("selected2")){
+    var target_id = element.getAttribute("data-target");
+    var target_window = document.getElementById(target_id);
+    if(target_window){
+      open_window(target_window);
+    }
+    deselect_element2(element);
+  }
+  else{
+    var prev = document.querySelector(".selected2");
+    if(prev){
+      prev.classList.remove("selected2");
+    }
+    select_element2(element);
+  }
+}
+
 if (welcome_window) welcome_window.addEventListener("mousedown", () => layer(welcome_window));
 
 if (notetaker_window) notetaker_window.addEventListener("mousedown", () => layer(notetaker_window));
@@ -436,6 +484,8 @@ if(terminal_window) terminal_window.addEventListener("mousedown", () => layer(te
 
 if(screentime_window) screentime_window.addEventListener("mousedown", () => layer(screentime_window));
 
+if(pickle_jar) pickle_jar.addEventListener("mousedown", () => layer(pickle_jar))
+
 var welcome_close = document.querySelector("#close_welcome");
 var welcome_open = document.querySelector("#open_welcome");
 var notetaker_close = document.querySelector("#notetaker_close");
@@ -444,6 +494,7 @@ var cursor_changer_close = document.querySelector("#CursorChanger_close");
 var background_settings_close = document.querySelector("#backgroundsetting_close")
 var terminal_close = document.querySelector("#close_terminal")
 var screentime_close = document.querySelector("#close_screentime")
+var pickle_jar_close = document.querySelector("#picklejarclose")
 
 if(notetaker_close){
   notetaker_close.addEventListener("click", function(e){e.stopPropagation(); close_window(notetaker_window);});
@@ -475,6 +526,15 @@ if(terminal_close){
 
 if(screentime_close){
   screentime_close.addEventListener("click", function(e){e.stopPropagation(); close_window(screentime_window)});
+}
+
+if(pickle_jar_close){
+  pickle_jar_close.addEventListener("click", function(e){
+    e.stopPropagation();
+    close_window(pickle_jar);
+    click_num = 0;
+    saves_click_num = 0;
+  });
 }
 
 function set_note_up(index){
@@ -542,6 +602,9 @@ function handle_add_note() {
   descInput.value = "";
   render_note_sidebar();
   set_note_up(content.length - 1);
+  if(pickle_jar_saves_list && pickle_jar_saves_list.style.display === "flex"){
+    render_saves_list();
+  }
 }
 
 var addNoteBtn = document.querySelector("#addNoteBtn");
@@ -894,6 +957,7 @@ if(pickle_jar_header){
 //
 
 var right_click_box_open = false;
+var new_folder_num = 0
 
 OS.addEventListener("contextmenu", (event) => {
 
@@ -902,7 +966,6 @@ OS.addEventListener("contextmenu", (event) => {
     if (event.srcElement.id === "apps" && event.srcElement.id !== "window"){
         right_click_box.style.left = `${event.pageX + 50}px`;
         right_click_box.style.top = `${event.pageY + 80}px`;
-
         if (!right_click_box_open){
             right_click_box.style.display = "flex";
             add_folder.style.display = "none";
@@ -911,6 +974,7 @@ OS.addEventListener("contextmenu", (event) => {
         }
         else{
             right_click_box.style.display = "none";
+            add_folder.style.display ="none"
             right_click_box_open = false;
             setTimeout(() => {right_click_box.style.display = "flex";}, 10);
             right_click_box_open = true;
@@ -939,31 +1003,184 @@ add_folder.addEventListener('mouseleave', () => {
     console.log('Mouse left - Hover ended');
     add_folder.style.background = "whitesmoke"
 });
+change_name_box.addEventListener('mouseenter', () => {
+    console.log('Mouse entered change_name_box - Hover started');
+    change_name_box.style.background = "#cfdde2"
+});
+change_name_box.addEventListener('mouseleave', () => {
+    console.log('Mouse left change_name_box - Hover ended');
+    change_name_box.style.background = "whitesmoke"
+});
 
-var new_folder_num = 0
+let folders = {}
+var change_name_folder_num = 0
+var change_icon_folder_num = 0
 
 add_folder.addEventListener('click', function (){
     new_folder_num += 1;
+    const folder_number = new_folder_num;
     const new_folder = document.createElement('div')
-    new_folder.classList = "desktop-icon"
+    new_folder.classList = "folder-icon"
     new_folder.style = "width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;"
     const new_folder_icon = document.createElement('div')
     new_folder_icon.style = "width: 64px; height: 64px; border-radius: 16px; background-color: #19e0ae; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);"
+    new_folder_icon.classList = "folder-icon"
     const new_folder_icon_text = document.createElement('p')
-    new_folder_icon_text.style.marginTop = "30px"
+    // new_folder_icon_text.style.marginTop = "30px"
     new_folder_icon_text.textContent = "📁"
+    new_folder_icon_text.classList = "folder-icon"
     new_folder_icon.appendChild(new_folder_icon_text)
     const new_folder_name = document.createElement('p')
     new_folder_name.style = "color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;"
     new_folder_name.textContent = "new folder " + new_folder_num
+    new_folder_name.classList = "folder-icon"
     new_folder.appendChild(new_folder_icon)
     new_folder.appendChild(new_folder_name)
     new_folder.id = new_folder_num
-    new_folder.addEventListener("click", function(){icon_tap(this)})
+    new_folder_name.id = "folder_name_" + new_folder_num
+    new_folder_icon_text.id = "folder_icon_" + (new_folder_num + 1);
+    new_folder.addEventListener("click", function(){
+        icon_tap(this);
+        console.log("done " + folder_number);
+    })
+    new_folder.addEventListener("contextmenu", function(){
+        folder_change_box.style.display = "flex";
+        folder_change_box_open = true;
+        change_name_folder_num = new_folder_name.id;
+        change_icon_folder_num = new_folder_icon_text.id
+        console.log("done")
+    })
     apps.appendChild(new_folder)
+    folders["folder_"+new_folder_num] = new_folder;
+
+    open_window(pickle_jar);
+    pickle_jar_main_desktop.style.display = "none";
+    pickle_jar_desktop_applications_list.style.display = "none";
+    pickle_jar_notetaker_list.style.display = "none";
+    pickle_jar_saves_list.style.display = "none";
+    render_pickle_jar_folders();
+    folder_list.style.display = "flex";
 })
 
-document.addEventListener("click", (e) => {if (e.target === pickle_jar_desktop || e.target === pickle_jar_desktop_text || e.target === pickle_jar_desktop_text_container){pickle_jar_desktop_text_container.style.backgroundColor = "rgb(204, 232, 255)"}})
+function render_pickle_jar_folders(){
+    if(!folder_list) return;
+    folder_list.innerHTML = "";
+    Object.keys(folders).forEach(function(key){
+        var source_folder = folders[key];
+        if(!source_folder || !source_folder.isConnected) return;
+        var icon_text_el = source_folder.querySelector('[id^="folder_icon_"]');
+        var name_el = source_folder.querySelector('[id^="folder_name_"]');
+
+        var file_icon = document.createElement("div");
+        file_icon.className = "desktop-icon";
+        file_icon.style = "width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;";
+
+        var icon_box = document.createElement("div");
+        icon_box.style = "width: 64px; height: 64px; border-radius: 16px; background-color: #19e0ae; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);";
+        icon_box.textContent = icon_text_el ? icon_text_el.textContent : "📁";
+
+        var name_p = document.createElement("p");
+        name_p.style = "color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold; word-break: break-word;";
+        name_p.textContent = name_el ? name_el.textContent : "new folder";
+
+        file_icon.appendChild(icon_box);
+        file_icon.appendChild(name_p);
+        folder_list.appendChild(file_icon);
+    });
+}
+
+pickle_jar_desktop_folders.addEventListener("click", function(){
+    pickle_jar_main_desktop.style.display = "none";
+    render_pickle_jar_folders();
+    folder_list.style.display = "flex";
+})
+
+change_name_box.addEventListener("click", (e) => {
+    var element = document.getElementById(change_name_folder_num);
+    var input_element = document.createElement("input");
+    input_element.type = 'text';
+    input_element.value = element.textContent;
+    input_element.id = element.id;
+    input_element.classList = "folder-icon folder-rename-input";
+    element.replaceWith(input_element);
+    input_element.focus();
+    input_element.select();
+
+    function finish_rename(){
+        var new_name = document.createElement('p');
+        new_name.style.cssText = element.style.cssText;
+        new_name.classList = "folder-icon";
+        new_name.id = input_element.id;
+        new_name.textContent = input_element.value.trim() || element.textContent;
+        input_element.replaceWith(new_name);
+    }
+
+    input_element.addEventListener("keydown", (ev) => {
+        if (ev.key === "Enter") input_element.blur();
+    });
+    input_element.addEventListener("blur", finish_rename, { once: true });
+
+    folder_change_box.style.display = "none";
+    folder_change_box_open = false;
+})
+
+document.addEventListener("click", (e) => {
+    if (e.target === pickle_jar_desktop || e.target === pickle_jar_desktop_text || e.target === pickle_jar_desktop_text_container){
+        pickle_jar_desktop_text_container.style.backgroundColor = "rgb(204, 232, 255)";
+        pickle_jar_desktop_applications_list.style.display = "none";
+        pickle_jar_notetaker_list.style.display = "none";
+        pickle_jar_saves_list.style.display = "none";
+        folder_list.style.display = "none";
+        pickle_jar_main_desktop.style.display = "flex";
+        click_num = 0;
+        saves_click_num = 0;
+    }
+    else if (e.target !== pickle_jar_desktop_applications && e.target !== pickle_jar_desktop_applications_icon && e.target !== pickle_jar_desktop_applications_text && e.target !== pickle_jar_desktop_applications_icon_e && e.target !== pickle_jar_desktop_folders && e.target !== pickle_jar_notetaker_folder && e.target !== pickle_jar_saves_folder){
+        pickle_jar_desktop_text_container.style.backgroundColor = "#ffffff";
+    }
+    console.log(e.target)
+})
+
+pickle_jar_desktop_applications.addEventListener("click", function(){
+    pickle_jar_main_desktop.style.display = "none";
+    pickle_jar_desktop_applications_list.style.display = "flex";
+})
+
+function render_saves_list(){
+    if(!pickle_jar_saves_list) return;
+    pickle_jar_saves_list.innerHTML = "";
+    content.forEach(function(note, index){
+        var file_icon = document.createElement("div");
+        file_icon.className = "desktop-icon";
+        file_icon.style = "width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;";
+        file_icon.innerHTML = `
+            <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">📝</div>
+            <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold; word-break: break-word;">${note.title}</p>
+        `;
+        file_icon.addEventListener("click", function(){
+            open_window(notetaker_window);
+            render_note_sidebar();
+            set_note_up(index);
+        });
+        pickle_jar_saves_list.appendChild(file_icon);
+    });
+}
+
+var folder_change_box_open = false
+
+document.addEventListener("mousemove", function(e){
+    if(!folder_change_box_open){
+        folder_change_box.style.left = `${e.pageX + 70}px`;
+        folder_change_box.style.top = `${e.pageY + 40}px`;
+    }
+})
+
+document.addEventListener("click", function (e){
+    if(e.target !== folder_change_box && e.target !== change_name_box){
+        folder_change_box.style.display = "none";
+        folder_change_box_open = false;
+    }
+})
 
 window.onload = function() {
   // center_window(welcome_window);

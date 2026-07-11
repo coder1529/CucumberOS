@@ -33,6 +33,10 @@
             <div id="addfolder" class="window" style="margin-left: 110px; margin-top: -50px; width:70px; display: none">New folder</div>
         </div>
     </div>
+    <div id="folderchange" class="window" style="height:80px; width: 100px; display: none; flex-wrap: wrap; flex-direction: row; z-index: 1;">
+        <div id="changename" style="font-size: 13px;padding: 10px; height: 20px">change name</div>
+        <div id="changeicon" style="font-size: 13px; padding: 10px; padding-right: 18.7px; height: 20px">change icon</div>
+    </div>
     <div id="apps" style="align-content: flex-start; flex-wrap: wrap; padding-top: 65px; padding-left: 30px; box-sizing: border-box; height: 100%; display: flex; gap: 25px; align-items: flex-start; position: relative;">
         <div id="notetaker" class="window" style="height: 620px; width: 840px; display: none; position: absolute; background-color: #f0f0f0; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; z-index: 1;">
             <div style="display: flex; justify-content: space-between; background-color: #333; color: white; padding: 8px 12px; align-items: center; box-sizing: border-box;">
@@ -140,20 +144,69 @@
                 <div style="background-color: navajowhite; margin-left: 17px; height: 60px; width: 250px; border-radius: 16px; margin-top: -1px"><p id="TLtime" style="margin-left: 10px; margin-top: 15px;"><br>0h 0m 0s</p></div>
             </div>
         </div>
-        <div id="picklejar" class="window" style="height: 360px; width: 540px; resize: both; overflow: auto; display: flex; flex-direction: column;">
+        <div id="picklejar" class="window" style="display: none; height: 360px; width: 540px; resize: both; overflow: auto; flex-direction: column;">
             <div id="picklejarheader" class="window_header" style="background-color: rgb(6 214 177); height: 30px; display: flex; justify-content: space-between; margin-left: 5px; flex-shrink: 0;">
                 <p style="margin: 6px; flex-grow: 1; cursor: move; font-weight: bold; color: whitesmoke">Pickle Jar</p>
-                <p class="close_button" style="margin-right: 10px; margin-top: 6px"></p>
+                <p id="picklejarclose" class="close_button" style="margin-right: 10px; margin-top: 6px"></p>
             </div>
-            <div style="display: flex; flex: 1; min-height: 0;">
+            <div style="display: flex; flex: 1; min-height: 330px;">
                 <nav id="sidebar" style="margin-top: 10px; margin-bottom: -10px; border-right: 2px solid #111111; padding: 0 10px; width: 130px; flex-shrink: 0; margin-left: -18px">
                     <ul id="picklejar-desktop" style="list-style: none; margin: 0; padding: 0;">
                         <a id="picklejar-desktop-text-container" class="sidebar-item" style="display: block; margin-left: 13px"><p id="picklejar-desktop-text" style="margin-left: -5px; height: 0px; margin-top: -4px">Desktop</p></a>
                     </ul>
                 </nav>
-                <div id="Picklejar-main" style="flex: 1; overflow: auto;">
+                <div id="picklejar-main-desktop" style="display: none; flex: 1; flex-direction: row; gap: 30px; overflow: auto;">
+                    <div id="applications" class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;">
+                        <div id="applications_icon" style="width: 64px; height: 64px; border-radius: 16px; background-color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); margin-top: 15px; margin-left: 35px"><div id="applications_icon_e" style="margin-top: -6px;">📱</div></div>
+                        <p id="applications_text" style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold; margin-left: 35px">Applications</p>
+                    </div>
+                    <div id="folders" class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;">
+                        <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); margin-top: 15px; margin-left: 35px"><div style="margin-top: -6px;">📁</div></div>
+                        <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold; margin-left: 35px">Folders</p>
+                    </div>
+                </div>
+                <div id="applications-list" style="display: none; flex: 1; flex-direction: row; flex-wrap: wrap; align-content: flex-start; column-gap: 20px; overflow: auto; margin-top: 20px; margin-left: 20px">
+                    <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap2(this)" data-target="notetaker">
+                        <img src="./ICON1.png" alt="NoteTaker Icon" style="width: 64px; height: 64px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
+                        <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">NoteTaker</p>
+                    </div>
+                    <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap2(this)" data-target="clicker">
+                        <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #059669; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">🥒</div>
+                        <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">Clicker</p>
+                    </div>
+                    <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap2(this)" data-target="CursorChanger">
+                        <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">🖱️</div>
+                        <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">Cursor Changer</p>
+                    </div>
+                    <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap2(this)" data-target="backgroundsetting">
+                        <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">🛠️</div>
+                        <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">Background Settings</p>
+                    </div>
+                    <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap2(this)" data-target="terminal">
+                        <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">🖥️</div>
+                        <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">Terminal</p>
+                    </div>
+                    <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap2(this)" data-target="screentime">
+                        <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">⏳</div>
+                        <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">Screentime</p>
+                    </div>
+                    <div id="_Notetaker" class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;">
+                        <div id="__Notetaker" style="width: 64px; height: 64px; border-radius: 16px; background-color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">📁</div>
+                        <p id="___Notetaker" style="color: rgb(230, 67, 67); margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;"><b>.</b>NoteTaker</p>
+                    </div>
+                </div>
+                <div id="_notetaker-list" style="display: none; flex: 1; flex-direction: row; flex-wrap: wrap; align-content: flex-start; column-gap: 20px; overflow: auto; margin-top: 20px; margin-left: 20px">
+                    <div id="saves" class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;">
+                            <div id="saves_icon" style="width: 64px; height: 64px; border-radius: 16px; background-color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2); margin-top: 15px; margin-left: 35px"><div id="saves_icon_e" style="margin-top: -6px;">📁</div></div>
+                            <p id="saves_text" style="color: rgb(230, 67, 67); margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold; margin-left: 35px"><b>.</b>saves</p>
                 </div>
             </div>
+            <div id="folder-list" style="display: none; flex: 1; flex-direction: row; flex-wrap: wrap; align-content: flex-start; column-gap: 20px; overflow: auto; margin-top: 20px; margin-left: 20px"></div>
+            <div id="saves-list" style="display: none; flex: 1; flex-direction: row; flex-wrap: wrap; align-content: flex-start; column-gap: 20px; overflow: auto; margin-top: 20px; margin-left: 20px"></div>
+            </div>
+        </div>
+        <div id="fastfinder" class="window" style="display: none; height: 30px; width: 680px; top: 350px">
+            <input type="text" id="fastfinderinput" placeholder="Enter app name" style="margin-left: 10px">
         </div>
         <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap(this)" data-target="notetaker">
             <img src="./ICON1.png" alt="NoteTaker Icon" style="width: 64px; height: 64px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
@@ -179,7 +232,12 @@
             <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">⏳</div>
             <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">Screentime</p>
         </div>
+        <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap(this)" data-target="picklejar">
+            <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);"><p style="margin-top: 30px;">📂</p></div>
+            <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">Pickle Jar</p>
+        </div>
     <script src="script.js"></script>
+    <script src="script2.js"></script>
     </div>
 </body>
 </html>

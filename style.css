@@ -48,6 +48,15 @@
     padding-right: 25px;
 }
 
+.selected2{
+    border: solid;
+    border-color: rgb(204, 232, 255);
+    border-radius: 23px;
+    padding-top: 15px;
+    padding-left: 15px;
+    padding-right: 25px;
+}
+
 .first_div{
     background-color: #dfb0b0;
     border-radius: 12px;
@@ -138,4 +147,38 @@
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
     transition: all 0.2s ease-in-out;
+}
+
+.desktop-icon {
+    width: 70px;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.folder-icon {
+    width: 70px;
+    text-align: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.folder-rename-input {
+    width: 64px;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+    color: #111;
+    background-color: whitesmoke;
+    border: none;
+    border-radius: 6px;
+    outline: 2px solid #19e0ae;
+    padding: 2px 4px;
+    margin: 6px 0 0 0;
 }
