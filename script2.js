@@ -7,6 +7,8 @@ var __notetaker = document.querySelector("#__Notetaker")
 var ___notetaker = document.querySelector("#___Notetaker")
 var _notetaker_list = document.querySelector("#_notetaker-list")
 var _notetaker_saves = document.querySelector("#saves")
+var addnewtxt = document.querySelector("#addnewtxt")
+var addtxt = document.querySelector("#addtxt")
 click_num = 0;
 
 window.addEventListener("keydown", (event) => {
@@ -139,4 +141,70 @@ _notetaker_saves.addEventListener("click", () => {
         pickle_jar_saves_list.style.display = "flex";
         saves_click_num = 0;
     }
+})
+
+var pickle_jar_right_click_open = false;
+
+document.addEventListener("mousemove", (e) => {
+    if(!pickle_jar_right_click_open) {
+        pickle_jar_folder_page_right_click.style.left = `${e.pageX + 55.5}px`
+        pickle_jar_folder_page_right_click.style.top = `${e.pageY + 40}px`
+    }
+})
+
+document.addEventListener("contextmenu", (e) => {
+    if(e.target === pickle_jar_folder_page){
+        pickle_jar_folder_page_right_click.style.left = `${e.pageX + 55.5}px`
+        pickle_jar_folder_page_right_click.style.top = `${e.pageY + 40}px`
+        if(!pickle_jar_right_click_open) {
+            biggest_index++;
+            pickle_jar_folder_page_right_click.style.zIndex = biggest_index;
+            pickle_jar_folder_page_right_click.style.display = "flex";
+            pickle_jar_right_click_open = true;
+        }
+        else{
+            pickle_jar_folder_page_right_click.style.display = "none";
+            pickle_jar_right_click_open = false;
+            // setTimeout(() => {pickle_jar_folder_page_right_click.style.display = "flex";}, 1);
+            biggest_index++;
+            pickle_jar_folder_page_right_click.style.zIndex = biggest_index;
+            pickle_jar_folder_page_right_click.style.display = "flex";
+            pickle_jar_right_click_open = true;
+        }
+    }
+    else{
+        pickle_jar_folder_page_right_click.style.display = "none";
+        pickle_jar_right_click_open = false;
+    }
+})
+
+document.addEventListener("mousedown", (e) => {
+    if(!pickle_jar_folder_page_right_click.contains(e.target)){
+        pickle_jar_folder_page_right_click.style.display = "none";
+        pickle_jar_right_click_open = false;
+    }
+})
+
+addnewtxt.addEventListener("mouseenter", () => {
+    console.log('Mouse entered pickle_jar_folder_page_right_click - Hover started');
+    addnewtxt.style.background = "#cfdde2";
+    addtxt.style.display = "flex";
+})
+
+addnewtxt.addEventListener("mouseleave", () => {
+    console.log('Mouse left pickle_jar_folder_page_right_click - Hover ended');
+    addnewtxt.style.background = "whitesmoke";
+    // addtxt.style.display = "none";
+})
+
+addtxt.addEventListener("mouseenter", () => {
+    addtxt.style.background = "#cfdde2"
+})
+
+addtxt.addEventListener("mouseleave", () => {
+    addtxt.style.background = "whitesmoke"
+})
+
+addtxt.addEventListener("click", () => {
+    create_txt_file(current_folder_page_key);
 })

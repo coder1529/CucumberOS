@@ -33,6 +33,11 @@
             <div id="addfolder" class="window" style="margin-left: 110px; margin-top: -50px; width:70px; display: none">New folder</div>
         </div>
     </div>
+    <div id="rightclickfolder" class="window" style="height:40px; width: 79.9px; z-index: 1; display: none;">
+        <div id="addnewtxt" style="font-size: 13px; margin-left: -0.9px; padding: 10px; height: 20px">Add new...
+            <div id="addtxt" class="window" style="margin-left: 110px; margin-top: 0px; width:70px; display: none">New txt file</div>
+        </div>
+    </div>
     <div id="folderchange" class="window" style="height:80px; width: 100px; display: none; flex-wrap: wrap; flex-direction: row; z-index: 1;">
         <div id="changename" style="font-size: 13px;padding: 10px; height: 20px">change name</div>
         <div id="changeicon" style="font-size: 13px; padding: 10px; padding-right: 18.7px; height: 20px">change icon</div>
@@ -203,13 +208,22 @@
             </div>
             <div id="folder-list" style="display: none; flex: 1; flex-direction: row; flex-wrap: wrap; align-content: flex-start; column-gap: 20px; overflow: auto; margin-top: 20px; margin-left: 20px"></div>
             <div id="saves-list" style="display: none; flex: 1; flex-direction: row; flex-wrap: wrap; align-content: flex-start; column-gap: 20px; overflow: auto; margin-top: 20px; margin-left: 20px"></div>
-            <div id="folder-page" style="display: none; flex: 1; flex-direction: column; overflow: auto; margin-top: 20px; margin-left: 20px">
+            <div id="folder-page" style="display: flex; flex: 1; flex-direction: row; flex-wrap: wrap; overflow: auto; margin-top: 20px; margin-left: 20px">
                 <p id="folder-page-title" style="color: whitesmoke; margin: 0 0 10px 0; font-size: 14px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;"></p>
             </div>
             </div>
         </div>
         <div id="fastfinder" class="window" style="display: none; height: 30px; width: 680px; top: 350px">
             <input type="text" id="fastfinderinput" placeholder="Enter app name" style="margin-left: 10px">
+        </div>
+        <div id="google-container" class="window" style="display: none; height: 620px; width: 900px; position: absolute; background-color: whitesmoke; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; z-index: 1; padding: 0;">
+            <div id="google-containerheader" class="window_header" style="margin: 0; background-color: #4285f4; height: 34px; display: flex; align-items: center; gap: 10px; box-sizing: border-box; padding: 0 10px; cursor: move;">
+                <p style="margin: 0; flex-grow: 0; font-weight: bold; color: white;">Cucumber Finder</p>
+                <input type="text" id="google-search-input" placeholder="Search Google..." style="flex-grow: 1; height: 22px; border-radius: 4px; border: none; padding: 0 8px;">
+                <button id="google-open-newtab" title="Open these results in a new tab (needed for sites like YouTube that refuse to load inside the box)" style="flex-shrink: 0; height: 22px; border: none; border-radius: 4px; padding: 0 8px; cursor: pointer; font-size: 12px;">Open in new tab ↗</button>
+                <p id="google-container_close" class="close_button" style="flex-shrink: 0;"></p>
+            </div>
+            <iframe id="google-frame" title="Google Search" style="width: 100%; height: calc(100% - 34px); border: none; display: block;"></iframe>
         </div>
         <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap(this)" data-target="notetaker">
             <img src="./ICON1.png" alt="NoteTaker Icon" style="width: 64px; height: 64px; border-radius: 16px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);">
@@ -238,6 +252,10 @@
         <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap(this)" data-target="picklejar">
             <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);"><p style="margin-top: 30px;">📂</p></div>
             <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">Pickle Jar</p>
+        </div>
+        <div class="desktop-icon" style="width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;" onclick="icon_tap(this)" data-target="google-container">
+            <div style="width: 64px; height: 64px; border-radius: 16px; background-color: #f59e0b; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);"><p style="margin-top: 30px;">🌐</p></div>
+            <p style="color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;">Cucumber Finder</p>
         </div>
     <script src="script.js"></script>
     <script src="script2.js"></script>

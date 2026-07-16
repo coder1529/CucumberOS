@@ -49,6 +49,10 @@ var cursor_changer_window = document.querySelector("#CursorChanger");
 var background_settings_window = document.querySelector("#backgroundsetting")
 var terminal_window = document.querySelector("#terminal")
 var screentime_window = document.querySelector("#screentime")
+var google_window = document.querySelector("#google-container")
+var google_frame = document.querySelector("#google-frame")
+var google_search_input = document.querySelector("#google-search-input")
+var google_open_newtab = document.querySelector("#google-open-newtab")
 var select_bar = document.querySelector("#top");
 var note_list_container = document.querySelector("#noteList");
 var note_contents_container = document.querySelector("#notesContent");
@@ -77,6 +81,7 @@ var change_name_box = document.querySelector("#changename")
 var folder_list = document.querySelector("#folder-list")
 var pickle_jar_folder_page = document.querySelector("#folder-page")
 var pickle_jar_folder_page_title = document.querySelector("#folder-page-title")
+var pickle_jar_folder_page_right_click = document.querySelector("#rightclickfolder")
 let notetakerOpen = false;
 let clickerOpen = false;
 let ccOpen = false;
@@ -240,6 +245,11 @@ function open_window(element){
       if(!tOpen){
           t_start_time = new Date()
           tOpen = true;
+      }
+  }
+  if(element == google_window){
+      if(google_frame && !google_frame.src){
+          search_google("cucumber");
       }
   }
 }
@@ -522,6 +532,7 @@ function open_folder_page(folder_key){
   current_folder_page_key = folder_key;
   pickle_jar_folder_page_title.textContent = get_folder_display_name(source_folder);
   pickle_jar_folder_page.style.display = "flex";
+  render_folder_files(folder_key);
 }
 
 function sync_pickle_jar_folder_views(folder_key){
@@ -549,6 +560,8 @@ if(screentime_window) screentime_window.addEventListener("mousedown", () => laye
 
 if(pickle_jar) pickle_jar.addEventListener("mousedown", () => layer(pickle_jar))
 
+if(google_window) google_window.addEventListener("mousedown", () => layer(google_window));
+
 var welcome_close = document.querySelector("#close_welcome");
 var welcome_open = document.querySelector("#open_welcome");
 var notetaker_close = document.querySelector("#notetaker_close");
@@ -558,6 +571,7 @@ var background_settings_close = document.querySelector("#backgroundsetting_close
 var terminal_close = document.querySelector("#close_terminal")
 var screentime_close = document.querySelector("#close_screentime")
 var pickle_jar_close = document.querySelector("#picklejarclose")
+var google_close = document.querySelector("#google-container_close")
 
 if(notetaker_close){
   notetaker_close.addEventListener("click", function(e){e.stopPropagation(); close_window(notetaker_window);});
@@ -598,6 +612,37 @@ if(pickle_jar_close){
     click_num = 0;
     saves_click_num = 0;
   });
+}
+
+if(google_close){
+  google_close.addEventListener("click", function(e){e.stopPropagation(); close_window(google_window);});
+}
+
+function search_google(query){
+  if(!google_frame || !query || !query.trim()){
+    return;
+  }
+  google_frame.src = "https://www.google.com/search?igu=1&q=" + encodeURIComponent(query.trim());
+}
+
+if(google_search_input){
+  google_search_input.addEventListener("keydown", function(e){
+    e.stopPropagation();
+    if(e.key === "Enter"){
+      search_google(google_search_input.value);
+    }
+  });
+  google_search_input.addEventListener("mousedown", function(e){e.stopPropagation();});
+}
+
+if(google_open_newtab){
+  google_open_newtab.addEventListener("click", function(e){
+    e.stopPropagation();
+    if(google_frame && google_frame.src){
+      window.open(google_frame.src, "_blank");
+    }
+  });
+  google_open_newtab.addEventListener("mousedown", function(e){e.stopPropagation();});
 }
 
 function set_note_up(index){
@@ -1139,6 +1184,52 @@ change_name_box.addEventListener('mouseleave', () => {
 let folders = {}
 var change_name_folder_num = 0
 var change_icon_folder_num = 0
+let folder_files = {}
+var new_file_num = 0
+
+function create_txt_file(folder_key){
+    if(!folder_key) return;
+    new_file_num += 1;
+    if(!folder_files[folder_key]) folder_files[folder_key] = [];
+    folder_files[folder_key].push({id: new_file_num, name: "New txt file"});
+    if(folder_key === current_folder_page_key){
+        render_folder_files(folder_key);
+    }
+}
+
+function render_folder_files(folder_key){
+    if(!pickle_jar_folder_page) return;
+    Array.from(pickle_jar_folder_page.children).forEach(function(child){
+        if(child !== pickle_jar_folder_page_title) child.remove();
+    });
+    var files = folder_files[folder_key] || [];
+    files.forEach(function(file){
+        var new_file = document.createElement("div");
+        new_file.classList = "folder-icon";
+        new_file.style = "width: 70px; text-align: center; cursor: pointer; display: flex; flex-direction: column; align-items: center;";
+        new_file.id = "file_" + file.id;
+        new_file.dataset.fileId = file.id;
+        new_file.dataset.folderKey = folder_key;
+
+        var new_file_icon = document.createElement("div");
+        new_file_icon.id = "file_icon_" + file.id;
+        new_file_icon.style = "width: 64px; height: 64px; border-radius: 16px; background-color: #ffffff; display: flex; align-items: center; justify-content: center; font-size: 36px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);";
+        new_file_icon.textContent = "📄";
+
+        var new_file_name = document.createElement("p");
+        new_file_name.id = "file_name_" + file.id;
+        new_file_name.style = "color: whitesmoke; margin: 6px 0 0 0; font-size: 13px; text-shadow: 1px 1px 4px rgba(0,0,0,0.8); font-weight: bold;";
+        new_file_name.textContent = file.name;
+
+        new_file.appendChild(new_file_icon);
+        new_file.appendChild(new_file_name);
+        new_file.addEventListener("click", function(){
+            open_window(notetaker_window);
+        });
+
+        pickle_jar_folder_page.appendChild(new_file);
+    });
+}
 
 function create_folder(custom_name){
     new_folder_num += 1;
@@ -1338,6 +1429,7 @@ window.onload = function() {
   drag_element(terminal_window)
   drag_element(screentime_window)
   drag_element(pickle_jar)
+  drag_element(google_window)
   render_note_sidebar();
 
   default_cursor.style.display = "block";
